@@ -1,10 +1,10 @@
-package com.CO2Lab.backend;
+package com.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackEndApplicationTests {
+class Co2LabBookingApplicationTests {
 
 	@Test
 	void contextLoads() {
