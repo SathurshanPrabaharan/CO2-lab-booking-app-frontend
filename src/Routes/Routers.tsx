@@ -5,6 +5,7 @@ import {Routes, Route} from 'react-router-dom'
 import Login from '../Pages/Login'
 import InventoryPage from '../Pages/InventoryPage'
 import Home from '../Pages/Home'
+import Register from '../Pages/Register'
 
 const Routers = () => {
   return (
@@ -14,6 +15,8 @@ const Routers = () => {
           <Route path='/login' element={<Login/>}/>
           { <Route path='InventoryPage' element={<InventoryPage/>}/> }
           <Route path='/InventoryPage' element={<InventoryPage/>}/>
+          { <Route path='Register' element={<Register/>}/> }
+          {/* <Route path='/Register' element={<Register/>}/> */}
       </Routes>
     </>
   )
