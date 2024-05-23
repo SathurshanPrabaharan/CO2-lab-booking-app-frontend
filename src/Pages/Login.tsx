@@ -1,4 +1,3 @@
-import comLab from "../assets/images/com-lab.jpg";
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 
@@ -11,25 +10,33 @@ const login = () => {
             Login
           </h2>
           <form action="">
-            <div className="my-4">
-              <label htmlFor="email" className="block text-left mb-2 text-xl">
-                Email
-              </label>
-              <input
-                type="email"
-                className="block w-80 bg-white text-black text-lg font-bold rounded-full h-[42px] focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
-              />
-              <FaUser className=" text-black " />
+          <div className="my-4 relative">
+            <label htmlFor="email" className="block text-left mb-2 text-xl">
+              Email
+            </label>
+            <div className="relative">
+              <input type="email" className="pl-10 pr-14 w-80 bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center" />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <FaUser className="text-black" />
+              </div>
             </div>
-            <div>
+          </div>
+
+            <div className="relative">
               <label htmlFor="email" className="block text-left mb-2 text-xl">
                 Password
               </label>
-              <input
+              {/* <input
                 type="password"
-                className="block w-80 bg-white text-black text-lg font-bold rounded-full h-[42px] focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                className="block w-80  bg-white text-black text-lg font-bold rounded-full h-[42px] focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
               />
-              <FaLock className="  text-black" />
+              <FaLock className="  text-black" /> */}
+              <div className="relative">
+                <input type="password" className="pl-10 pr-14 w-80 bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center" />
+                   <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <FaLock className="text-black" />
+                  </div>
+              </div>
             </div>
            
             <div className="mt-3 flex items-center pl-2">
