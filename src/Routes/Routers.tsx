@@ -6,6 +6,7 @@ import Login from '../Pages/Login'
 import InventoryPage from '../Pages/InventoryPage'
 import Home from '../Pages/Home'
 import Register from '../Pages/Register'
+import AdminPage from '../Pages/AdminPage'
 
 const Routers = () => {
   return (
@@ -17,6 +18,7 @@ const Routers = () => {
           <Route path='/Inventory_page' element={<InventoryPage/>}/>
           { <Route path='Register' element={<Register/>}/> }
           {/* <Route path='/Register' element={<Register/>}/> */}
+          { <Route path='Admin_page' element={<AdminPage/>}/> }
       </Routes>
     </>
   )
