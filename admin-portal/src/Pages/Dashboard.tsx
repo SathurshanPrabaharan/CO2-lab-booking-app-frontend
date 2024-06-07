@@ -44,7 +44,6 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
-        
 
         <div className="w-1/4 pl-6">
           <div className="bg-white p-4 rounded-lg shadow-md mb-4">
