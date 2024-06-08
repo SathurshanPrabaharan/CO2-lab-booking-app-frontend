@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-
 import { FaUserCog, FaSearch, FaPlus, FaTrash, FaChevronDown, FaChevronUp, FaCheck } from 'react-icons/fa';
 import InventoryPage from './InventoryPage'; // Import the InventoryPage component
 import DashboardPage from './Dashboard'; // Import the Dashboard component
 import Setting from './Setting';
 import StudentPage from './StudenrPage';
 import StaffPage from './StaffPage';
+import Course from './Course';
+import Department from './Department';
+import Profession from './Profession';
 
 const Admin: React.FC = () => {
   const [labs, setLabs] = useState({
@@ -22,11 +24,9 @@ const Admin: React.FC = () => {
   const [activePage, setActivePage] = useState('Home');
   const [newLabName, setNewLabName] = useState('');
   const [labType, setLabType] = useState('requests');
-
   const [showDescription, setShowDescription] = useState<number | null>(null); // State to manage the description visibility
 
   const handleDelete = (type: string, id: number) => {
-
     setLabs({
       ...labs,
       [type]: labs[type].filter(lab => lab.id !== id)
@@ -37,19 +37,16 @@ const Admin: React.FC = () => {
     if (newLabName.trim() === '') return;
 
     const newLab = {
-
       id: Date.now(),
       name: newLabName,
       description: '',
       accepted: false
-
     };
 
     setLabs({
       ...labs,
       [labType]: [...labs[labType], newLab]
     });
-
 
     setNewLabName('');
   };
@@ -107,7 +104,6 @@ const Admin: React.FC = () => {
     ))
   );
 
-
   const renderContent = () => {
     switch (activePage) {
       case 'Home':
@@ -120,7 +116,6 @@ const Admin: React.FC = () => {
             <h3 className="text-2xl font-bold mb-4 text-black mt-8">Overrides</h3>
             <div className="space-y-4">
               {renderLabs('overrides')}
-
             </div>
             <div className="flex items-center space-x-2 mt-6">
               <select
@@ -145,7 +140,6 @@ const Admin: React.FC = () => {
           </div>
         );
 
-
       case 'Dashboard':
         return <DashboardPage />;
       case 'Inventory':
@@ -156,7 +150,12 @@ const Admin: React.FC = () => {
         return <StaffPage/>;
       case 'student_management':
         return <StudentPage />;
-
+      case 'Course':
+        return <Course />;
+      case 'Department':
+       return <Department />;
+      case 'Profession':
+        return <Profession />;
       default:
         return null;
     }
@@ -176,7 +175,6 @@ const Admin: React.FC = () => {
           <button onClick={() => setActivePage('Course')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Course' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Course</button>
           <button onClick={() => setActivePage('Department')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Department' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Department</button>
           <button onClick={() => setActivePage('Profession')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Profession' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Profession</button>
-
           <button onClick={() => setActivePage('Settings')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Settings' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Settings</button>
         </nav>
       </div>
