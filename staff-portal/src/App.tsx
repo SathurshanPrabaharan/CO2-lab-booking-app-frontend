@@ -16,6 +16,7 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Inventory from './pages/Inventory/Inventory';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -85,6 +86,15 @@ function App() {
             <>
               <PageTitle title="Lab Cancelling | CO2 Lab Booking System | Staff Portal" />
               <LabCancel />
+            </>
+          }
+        />
+        <Route
+          path="/inventory"
+          element={
+            <>
+              <PageTitle title="Inventory | CO2 Lab Booking System | Staff Portal" />
+              <Inventory />
             </>
           }
         />

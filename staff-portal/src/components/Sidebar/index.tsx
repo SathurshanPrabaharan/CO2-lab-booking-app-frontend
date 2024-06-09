@@ -275,6 +275,45 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup>
               {/* <!-- Menu Item Forms --> */}
 
+              {/* <!-- Menu Item Inventory --> */}
+              <li>
+                <NavLink
+                  to="/inventory"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes('inventory') &&
+                    'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <svg
+                    className="fill-current"
+                    width="18"
+                    height="19"
+                    viewBox="0 0 18 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clipPath="url(#clip0_130_9763)">
+                      <path
+                        d="M6 2H12C12.55 2 13 2.45 13 3V4H14C15.1 4 16 4.9 16 6V16C16 17.1 15.1 18 14 18H4C2.9 18 2 17.1 2 16V6C2 4.9 2.9 4 4 4H5V3C5 2.45 5.45 2 6 2ZM6 4V3H12V4H6ZM4 6V16H14V6H4ZM5 7H13V9H5V7ZM5 10H13V12H5V10ZM5 13H13V15H5V13Z"
+                        fill=""
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_130_9763">
+                        <rect
+                          width="18"
+                          height="18"
+                          fill="white"
+                          transform="translate(0 0.052124)"
+                        />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  Inventory
+                </NavLink>
+              </li>
+              {/* <!-- Menu Item Inventory --> */}
+
               {/* <!-- Menu Item Settings --> */}
               <li>
                 <NavLink
