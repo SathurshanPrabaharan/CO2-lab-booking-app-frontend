@@ -49,7 +49,7 @@ const TableOne = () => {
       </h4>
 
       <div className="flex flex-col">
-        <div className="grid grid-cols-5 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-7">
+        <div className="hidden sm:grid sm:grid-cols-5 lg:grid-cols-7 rounded-sm bg-gray-2 dark:bg-meta-4">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
               Date
@@ -78,27 +78,32 @@ const TableOne = () => {
 
         {bookings.map((booking) => (
           <div
-            className="grid grid-cols-5 sm:grid-cols-7 border-b border-stroke dark:border-strokedark"
+            className="flex flex-col sm:grid sm:grid-cols-5 lg:grid-cols-7 border-b border-stroke dark:border-strokedark"
             key={booking.id}
           >
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">Date:</span>
               <p className="text-black dark:text-white">{booking.date}</p>
             </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">Time:</span>
               <p className="text-black dark:text-white">{booking.time}</p>
             </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">Course Code:</span>
               <p className="text-black dark:text-white">{booking.courseCode}</p>
             </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">Lab Name:</span>
               <p className="text-black dark:text-white">{booking.labName}</p>
             </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">Status:</span>
               <p className="text-black dark:text-white">
                 {booking.approved ? 'Approved' : 'Pending'}
               </p>
             </div>
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
               {booking.approved ? (
                 <button
                   className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded"
