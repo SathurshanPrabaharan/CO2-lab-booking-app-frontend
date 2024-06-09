@@ -8,36 +8,15 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  width: 100%;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #f1f1f4;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  color: #868788;
 }
 
 h1 {
