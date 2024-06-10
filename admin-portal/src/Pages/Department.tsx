@@ -112,7 +112,7 @@ const DepartmentPage: React.FC = () => {
                 />
               </div>
               <div className="my-4">
-                <label htmlFor="hodId" className="block text-left mb-2 text-xl text-black">HOD ID</label>
+                <label htmlFor="hodId" className="block text-left mb-2 text-xl text-black">HOD</label>
                 <input
                   type="text"
                   name="hodId"
