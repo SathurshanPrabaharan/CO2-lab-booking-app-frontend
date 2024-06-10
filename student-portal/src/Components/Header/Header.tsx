@@ -18,7 +18,9 @@ const Header: React.FC = () => {
             src={UoJ_logo}
             alt="Logo"
           />
-          <div className="font-bold text-xl md:text-2xl">User Profile</div>
+          <div className="font-bold text-xl md:text-2xl">
+            Welcome to Computer Lab 2 Booking System
+          </div>
         </div>
         <div className="hidden md:flex space-x-8">
           {Links.map((link) => (
