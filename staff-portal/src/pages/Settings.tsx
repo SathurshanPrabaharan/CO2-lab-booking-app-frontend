@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Select, { MultiValue, ActionMeta } from 'react-select';
 
 const Settings = () => {
+  const [name, setName] = useState('John Doe');
   const [role, setRole] = useState('Lecturer');
   const [department, setDepartment] = useState('Computer Science');
   const [courses, setCourses] = useState([{ value: 'CS101', label: 'CS101' }]);
@@ -64,6 +65,25 @@ const Settings = () => {
               </div>
               <div className="p-7">
                 <form onSubmit={handleSaveClick}>
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="name"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
+                    />
+                  </div>
+
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -197,7 +217,7 @@ const Settings = () => {
                           <path
                             fillRule="evenodd"
                             clipRule="evenodd"
-                            d="M1.99967 9.33337C2.36786 9.33337 2.66634 9.63185 2.66634 10V12.6667C2.66634 12.8435 2.73658 13.0131 2.8616 13.1381C2.98663 13.2631 3.1562 13.3334 3.33301 13.3334H12.6663C12.8431 13.3334 13.0127 13.2631 13.1377 13.1381C13.2628 13.0131 13.333 12.8435 13.333 12.6667V10C13.333 9.63185 13.6315 9.33337 13.9997 9.33337C14.3679 9.33337 14.6663 9.63185 14.6663 10V12.6667C14.6663 13.1971 14.4556 13.7058 14.0806 14.0809C13.7055 14.456 13.1968 14.6667 12.6663 14.6667H3.33301C2.80257 14.6667 2.29387 14.456 1.91879 14.0809C1.54372 13.7058 1.33301 13.1971 1.33301 12.6667V10C1.33301 9.63185 1.63148 9.33337 1.99967 9.33337Z"
+                            d="M1.99967 9.33337C2.36786 9.33337 2.66634 9.63185 2.66634 10V12.6667C2.66634 12.8435 2.73658 13.0131 2.86161 13.1381C2.98664 13.2632 3.15622 13.3334 3.33301 13.3334H12.6663C12.8431 13.3334 13.0127 13.2632 13.1377 13.1381C13.2627 13.0131 13.333 12.8435 13.333 12.6667V10C13.333 9.63185 13.6315 9.33337 13.9997 9.33337C14.3679 9.33337 14.6663 9.63185 14.6663 10V12.6667C14.6663 13.1971 14.4556 13.7058 14.0806 14.0809C13.7055 14.456 13.1968 14.6667 12.6663 14.6667H3.33301C2.80257 14.6667 2.29387 14.456 1.91879 14.0809C1.54372 13.7058 1.33301 13.1971 1.33301 12.6667V10C1.33301 9.63185 1.63148 9.33337 1.99967 9.33337Z"
                             fill="#3C50E0"
                           />
                           <path
