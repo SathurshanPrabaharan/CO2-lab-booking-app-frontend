@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-const handleClick = () => {
-  const navigate = useNavigate();
-  navigate("ProfileUpdate");
-};
+
 const ProfileCard: React.FC = () => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("ProfileUpdate");
+  };
   return (
     <div className="card body text-center text-bold text-3xl font-Poppins relative">
       <img

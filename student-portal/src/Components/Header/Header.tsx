@@ -5,13 +5,14 @@ const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const Links = [
     { name: "Home", link: "/" },
-    { name: "Profile", link: "/" },
-    { name: "Schedule", link: "/" },
+    { name: "Profile", link: "/ProfileUpdate" },
+    { name: "Schedule", link: "/Calendar" },
+    { name: "Inventory", link: "/Inventory" },
   ];
 
   return (
     <header className="bg-gray-800 text-white shadow-md">
-      <div className="container mx-auto flex justify-between items-center p-5">
+      <div className="container mx-auto flex justify-between items-center p-1">
         <div className="flex items-center gap-5">
           <img
             className="w-20 md:w-28 md:left-0 p-1 opacity-90"
