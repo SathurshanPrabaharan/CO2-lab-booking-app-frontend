@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { FaUser, FaLock, FaEnvelope, FaIdBadge } from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaUser, FaLock, FaEnvelope, FaIdBadge, FaEdit } from "react-icons/fa";
 
 const Setting = () => {
   const [profile, setProfile] = useState({
@@ -14,6 +14,7 @@ const Setting = () => {
   });
 
   const [isStudent, setIsStudent] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -24,6 +25,7 @@ const Setting = () => {
     e.preventDefault();
     // Handle form submission (e.g., send data to server)
     console.log('Profile updated:', profile);
+    setIsEditing(false); // Disable editing after submission
   };
 
   return (
@@ -40,7 +42,8 @@ const Setting = () => {
                 name="name"
                 value={profile.name}
                 onChange={handleChange}
-                className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                readOnly={!isEditing}
+                className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                 <FaUser className="text-black" />
@@ -56,7 +59,8 @@ const Setting = () => {
                 name="email"
                 value={profile.email}
                 onChange={handleChange}
-                className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                readOnly={!isEditing}
+                className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                 <FaEnvelope className="text-black" />
@@ -72,7 +76,8 @@ const Setting = () => {
                 name="password"
                 value={profile.password}
                 onChange={handleChange}
-                className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                readOnly={!isEditing}
+                className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                 <FaLock className="text-black" />
@@ -87,7 +92,8 @@ const Setting = () => {
                 name="department_id"
                 value={profile.department_id}
                 onChange={handleChange}
-                className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                disabled={!isEditing}
+                className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
               >
                 <option value="department1">Department 1</option>
                 <option value="department2">Department 2</option>
@@ -106,7 +112,8 @@ const Setting = () => {
                 name="profession_id"
                 value={profile.profession_id}
                 onChange={handleChange}
-                className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                disabled={!isEditing}
+                className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
               >
                 <option value="profession1">Profession 1</option>
                 <option value="profession2">Profession 2</option>
@@ -128,7 +135,8 @@ const Setting = () => {
                     name="reg_num"
                     value={profile.reg_num}
                     onChange={handleChange}
-                    className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                    readOnly={!isEditing}
+                    className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                     <FaIdBadge className="text-black" />
@@ -143,7 +151,8 @@ const Setting = () => {
                     name="semester"
                     value={profile.semester}
                     onChange={handleChange}
-                    className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                    disabled={!isEditing}
+                    className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
                   >
                     <option value="semester1">Semester 1</option>
                     <option value="semester2">Semester 2</option>
@@ -165,7 +174,8 @@ const Setting = () => {
                   name="responsible_course_modules"
                   value={profile.responsible_course_modules}
                   onChange={handleChange}
-                  className="pl-10 pr-14 w-full bg-white text-black text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center"
+                  disabled={!isEditing}
+                  className={`pl-10 pr-14 w-full text-lg font-bold rounded-full h-12 focus:bg-slate-200 border-blue-300 focus:outline-none focus:text-slate-950 text-center ${isEditing ? 'bg-white text-black' : 'bg-gray-300 text-gray-600'}`}
                 >
                   <option value="module1">Course Module 1</option>
                   <option value="module2">Course Module 2</option>
@@ -178,13 +188,24 @@ const Setting = () => {
             </div>
           )}
 
-          <button
-            className="w-full mb-4 text-[18px] mt-10 rounded-full bg-emerald-600 text-white hover:text-white py-2 duration-100 border-none transform transition-transform hover:scale-110 active:outline-none active:border-none outline-none"
-            type="submit"
-          >
-            Update Profile
-          </button>
+          {isEditing && (
+            <button
+              className="w-full mb-4 text-[18px] mt-10 rounded-full bg-emerald-600 text-white hover:text-white py-2 duration-100 border-none transform transition-transform hover:scale-110 active:outline-none active:border-none outline-none"
+              type="submit"
+            >
+              Update Profile
+            </button>
+          )}
         </form>
+
+        {!isEditing && (
+          <button
+            className="w-full mb-4 text-[18px] mt-10 rounded-full bg-blue-600 text-white hover:text-white py-2 duration-100 border-none transform transition-transform hover:scale-110 active:outline-none active:border-none outline-none flex items-center justify-center"
+            onClick={() => setIsEditing(true)}
+          >
+            <FaEdit className="mr-2" /> Edit Profile
+          </button>
+        )}
       </div>
     </div>
   );
