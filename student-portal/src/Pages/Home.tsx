@@ -8,7 +8,7 @@ const Home: React.FC = () => {
           src="src/assets/images/com-lab-3.jpeg"
           className="w-full h-screen object-cover absolute mix-blend-overlay"
         />
-        <div className="text-white text-bold text-4xl  mt-10 ml-10 md:ml-20 mb-20 ">
+        <div className="text-white text-extrabold font-mono text-2xl md:text-4xl mt-4 md:mt-10 text-center lg:ml-20 mb-8 md:mb-20 ">
           Hello 202X/E/XXX
         </div>
         <Profile />

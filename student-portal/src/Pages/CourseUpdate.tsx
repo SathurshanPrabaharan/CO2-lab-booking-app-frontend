@@ -25,16 +25,18 @@ const CourseUpdate: React.FC = () => {
     );
   };
   return (
-    <div className="bg-gradient-to-br  from-gray-900 to-gray-400 opacity-95 w-full h-screen relative overflow-hidden block">
+    <div className="bg-gradient-to-br  from-gray-900 to-gray-400 opacity-95 w-full lg:h-screen relative overflow-hidden block">
       <img
         src="src/assets/images/com-lab-3.jpeg"
         className="w-full h-screen object-cover absolute mix-blend-overlay"
       />
-      <div className="flex mx-auto gap-2 mt-16">
-        <div className="Module card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700 md:px-10 py-20 ml-10 mr-10 md:ml-20 md:mr-20 border border-gray-600 w-full lg:w-1/2">
+      <div className="lg:flex mx-auto gap-2 mt-16">
+        <div className="Module card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700  p-4 lg:p-10 lg:pb-20 ml-10 mr-10 lg:ml-3 lg:mr-20 border border-gray-600 w-80  block relative md:w-3/4 md:ml-20 lg:w-3/4 mb-16">
           <div className="card-body font-Poppins font-bold">
             <main className="p-4">
-              <h1 className="text-3xl font-bold mb-4">Add Course Module</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-4">
+                Add Course Module
+              </h1>
               <ModuleDropdown
                 modules={availableModules}
                 addModule={addModuleToProfile}
@@ -42,10 +44,10 @@ const CourseUpdate: React.FC = () => {
             </main>
           </div>
         </div>
-        <div className="Module card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700  border border-gray-600 mr-10 w-full lg:w-1/2">
+        <div className="Module card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700  p-4 lg:p-10 lg:pb-20 ml-10 mr-10 lg:ml-3 lg:mr-20 border border-gray-600 w-4/5 block relative md:w-3/4 md:ml-20 lg:w-3/4">
           <div class="relative overflow-hidden shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-black">
-              <thead class="text-lg  bg-gradient-to-l from-slate-500 to-slate-100 opacity-95">
+              <thead class="text-sm md:text-lg  bg-gradient-to-l from-slate-500 to-slate-100 opacity-95">
                 <tr>
                   <th scope="col" class="px-6 py-3">
                     Course Code
@@ -122,10 +124,10 @@ const CourseUpdate: React.FC = () => {
                       {module.code}
                     </th>
                     <td className="px-6 py-4">{module.name}</td>
-                    <td className="px-6 py-4">
+                    <td className=" px-2 md:px-6 py-4">
                       <button
                         onClick={() => removeModule(module.code)}
-                        className="px-2 py-1 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
+                        className="px-1 py-1 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-500"
                       >
                         Delete
                       </button>

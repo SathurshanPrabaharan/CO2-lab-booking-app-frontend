@@ -112,7 +112,7 @@ const ProfessionPage: React.FC = () => {
                 />
               </div>
               <div className="my-4">
-                <label htmlFor="professionId" className="block text-left mb-2 text-xl text-black">Profession ID</label>
+                <label htmlFor="professionId" className="block text-left mb-2 text-xl text-black">Profession</label>
                 <input
                   type="text"
                   name="professionId"

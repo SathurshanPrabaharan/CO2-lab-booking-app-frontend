@@ -11,8 +11,8 @@ const ProfileUpdate = () => {
         src="src/assets/images/com-lab-3.jpeg"
         className="w-full h-screen object-cover absolute mix-blend-overlay"
       />
-      <div className="flex mx-auto gap-8 mt-10">
-        <div className="informationUpdate bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700 md:px-10 py-10 ml-10 mr-10 md:ml-20 border border-gray-600 w-full lg:w-1/2 ">
+      <div className="lg:flex mx-auto gap-8 mt-8">
+        <div className="infoUpdate card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700  p-4 lg:p-10 ml-10 mr-10 lg:ml-3 lg:mr-20 border border-gray-600 w-80  block relative md:w-4/5 md:ml-20 lg:w-3/4 mt-16">
           <div className="card-body font-Poppins font-bold">
             <div className="border-b border-stroke py-4 px-7 ">
               <h3 className=" text-2xl text-black text-center">
@@ -93,7 +93,7 @@ const ProfileUpdate = () => {
           </div>
         </div>
 
-        <div className="Module card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700 md:px-10 py-20 ml-10 mr-10 md:ml-20 md:mr-20 border border-gray-600 w-full lg:w-1/2 block">
+        <div className="inforUpdate card bg-gradient-to-l from-slate-300 to-slate-100 opacity-95 rounded-lg shadow-lg dark:border-gray-700  p-4 lg:p-10 lg:pb-20 ml-10 mr-10 lg:ml-3 lg:mr-20 border border-gray-600 w-80  block relative md:w-4/5 md:ml-20 lg:w-3/4 mt-16">
           <div className="card-body font-Poppins font-bold">
             <div className="border-b border-stroke py-4 px-7 ">
               <h3 className="text-2xl text-center text-black">
@@ -109,11 +109,11 @@ const ProfileUpdate = () => {
 
               <div className="mb-5 text-black text-xl text-center">
                 Edit your photo
-                <span className="flex gap-2.5 mt-5 justify-center">
-                  <button className="cursor-pointer transition-all bg-blue-500 text-white px-6 py-1 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] mr-4 text-lg">
+                <span className="flex md:gap-2.5 mt-5 justify-center">
+                  <button className="cursor-pointer transition-all bg-blue-500 text-white px-4 md:px-6 py-1 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] mr-2 text-lg">
                     Delete
                   </button>
-                  <button className="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] mr-4 text-lg">
+                  <button className="cursor-pointer transition-all bg-blue-500 text-white px-4 md:px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] text-lg">
                     Update
                   </button>
                 </span>
@@ -153,14 +153,14 @@ const ProfileUpdate = () => {
                 </div>
               </div>
 
-              <div className="flex gap-4.5 mt-5 justify-center">
+              <div className="flex md:gap-2.5 mt-5 justify-center">
                 <button
-                  className="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] mr-4 text-lg"
+                  className="cursor-pointer transition-all bg-blue-500 text-white px-4 md:px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] mr-2 text-lg"
                   type="submit"
                 >
                   Cancel
                 </button>
-                <button className="cursor-pointer transition-all bg-blue-500 text-white px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] mr-4 text-lg">
+                <button className="cursor-pointer transition-all bg-blue-500 text-white px-4 md:px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] text-lg">
                   Save
                 </button>
               </div>

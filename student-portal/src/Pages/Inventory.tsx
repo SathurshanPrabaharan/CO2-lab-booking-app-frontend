@@ -100,7 +100,7 @@ const Inventory: React.FC = () => {
   );
 
   return (
-    <div className="mx-auto max-w-270">
+    <div className="mx-auto max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg">
       <div className="mb-4 flex space-x-4">
         <select
           name="condition"
@@ -116,7 +116,7 @@ const Inventory: React.FC = () => {
           name="software"
           value={filter.software}
           onChange={handleFilterChange}
-          className="px-4 py-2 rounded border border-stroke bg-white"
+          className="px-2 lg:px-4 py-2 rounded border border-stroke bg-white"
         >
           <option value="">All Software</option>
           {availableSoftware.map((software) => (
@@ -130,7 +130,7 @@ const Inventory: React.FC = () => {
       <h2 className="text-4xl font-Poppins font-bold mt-8 mb-8 text-black text-center ">
         Computer Booking System
       </h2>
-      <div className="grid grid-cols-6 rounded-md gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 rounded-md gap-4">
         {filteredPcs.map((pc) => (
           <div
             key={pc.id}
