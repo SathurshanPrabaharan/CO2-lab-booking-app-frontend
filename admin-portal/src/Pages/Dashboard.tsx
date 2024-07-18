@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import CustomCalendar from '../Components/CustomCalendar.tsx'; // Adjust the path as necessary
 
 const DashboardPage = () => {
   const [date, setDate] = useState(new Date());
@@ -26,28 +25,13 @@ const DashboardPage = () => {
     maintainAspectRatio: false,
   };
 
-  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
-    // Add class to tiles in month view only
-    if (view === 'month') {
-      // Check if this date is one of the booked dates
-      if (bookedDates.find(d => d.toDateString() === date.toDateString())) {
-        return 'booked-date';
-      }
-    }
-    return null;
-  };
-
   return (
     <div className="flex min-h-screen bg-gray-100 p-6">
       <div className="flex flex-1">
         <div className="w-3/4 bg-white p-6 rounded-lg shadow-md">
           <div className="bg-white p-4 rounded-lg shadow-md mb-4">
             <h3 className="text-xl font-bold mb-2 text-black">Calendar</h3>
-            <Calendar
-              value={date}
-              onChange={setDate}
-              tileClassName={tileClassName}
-            />
+            <CustomCalendar />
           </div>
           <h3 className="text-2xl font-bold mb-4 text-black">Date: 1</h3>
           <div className="grid grid-cols-1 gap-4">
