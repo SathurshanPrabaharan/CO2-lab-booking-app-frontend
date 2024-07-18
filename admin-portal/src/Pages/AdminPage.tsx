@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
-import { FaUserCog, FaSearch, FaEllipsisV, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaUserCog, FaSearch, FaPlus, FaTrash, FaChevronDown, FaChevronUp, FaCheck } from 'react-icons/fa';
 import InventoryPage from './InventoryPage'; // Import the InventoryPage component
-import DashboardPage from './Dashboard';
+import DashboardPage from './Dashboard'; // Import the Dashboard component
+import Setting from './Setting';
+import StudentPage from './StudenrPage';
+import StaffPage from './StaffPage';
+import Course from './Course';
+import Department from './Department';
+import Profession from './Profession';
 
-const Admin = () => {
+const Admin: React.FC = () => {
   const [labs, setLabs] = useState({
-    requests: [{ id: 1, name: 'Lab A' }, { id: 2, name: 'Lab B' }],
-    overrides: [{ id: 3, name: 'Lab Y' }, { id: 4, name: 'Lab Z' }]
+    requests: [
+      { id: 1, name: 'Lab A', description: 'Description for Lab A', accepted: false },
+      { id: 2, name: 'Lab B', description: 'Description for Lab B', accepted: false }
+    ],
+    overrides: [
+      { id: 3, name: 'Lab Y', description: 'Description for Lab Y', accepted: false },
+      { id: 4, name: 'Lab Z', description: 'Description for Lab Z', accepted: false }
+    ]
   });
 
   const [activePage, setActivePage] = useState('Home');
   const [newLabName, setNewLabName] = useState('');
   const [labType, setLabType] = useState('requests');
+  const [showDescription, setShowDescription] = useState<number | null>(null); // State to manage the description visibility
 
-  const handleDelete = (type, id) => {
+  const handleDelete = (type: string, id: number) => {
     setLabs({
       ...labs,
       [type]: labs[type].filter(lab => lab.id !== id)
@@ -24,8 +37,10 @@ const Admin = () => {
     if (newLabName.trim() === '') return;
 
     const newLab = {
-      id: Date.now(), // Unique ID for the new lab
-      name: newLabName
+      id: Date.now(),
+      name: newLabName,
+      description: '',
+      accepted: false
     };
 
     setLabs({
@@ -33,8 +48,61 @@ const Admin = () => {
       [labType]: [...labs[labType], newLab]
     });
 
-    setNewLabName(''); // Clear the input field after adding
+    setNewLabName('');
   };
+
+  const handleAccept = (type: string, id: number) => {
+    const labIndex = labs[type].findIndex((lab) => lab.id === id);
+
+    if (labIndex !== -1) {
+      const updatedLabs = [...labs[type]];
+      updatedLabs[labIndex] = { ...updatedLabs[labIndex], accepted: true };
+
+      setLabs({
+        ...labs,
+        [type]: updatedLabs,
+      });
+
+      console.log(`Accepted ${type} with id ${id}`);
+    }
+  };
+
+  const toggleDescription = (id: number) => {
+    setShowDescription(showDescription === id ? null : id);
+  };
+
+  const renderLabs = (type: 'requests' | 'overrides') => (
+    labs[type].map(lab => (
+      <div key={lab.id} className="bg-white p-4 rounded-lg shadow-md">
+        <div className="flex justify-between items-center" onClick={() => toggleDescription(lab.id)}>
+          <div className='text-black'>{lab.name}</div>
+          <div className="flex space-x-4">
+            {showDescription === lab.id ? <FaChevronUp className="text-xl cursor-pointer" /> : <FaChevronDown className="text-xl cursor-pointer" />}
+          </div>
+        </div>
+        {showDescription === lab.id && (
+          <div className="mt-2 text-gray-700">
+            {lab.description}
+            <div className="mt-2 flex space-x-2">
+              <button 
+                onClick={() => handleAccept(type, lab.id)} 
+                className={`bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-green-600 ${lab.accepted ? 'cursor-not-allowed opacity-50' : ''}`}
+                disabled={lab.accepted}
+              >
+                <FaCheck className="text-xl" /> {lab.accepted ? 'Accepted' : 'Accept'}
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); handleDelete(type, lab.id); }} 
+                className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-600"
+              >
+                <FaTrash className="text-xl" /> Reject
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    ))
+  );
 
   const renderContent = () => {
     switch (activePage) {
@@ -43,31 +111,11 @@ const Admin = () => {
           <div>
             <h3 className="text-2xl font-bold mb-4 text-black">Requests</h3>
             <div className="space-y-4">
-              {labs.requests.map(lab => (
-                <div key={lab.id} className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                  <div className='text-black'>{lab.name}</div>
-                  <div className="flex space-x-4">
-                    <FaEllipsisV className="text-xl cursor-pointer" />
-                    <button onClick={() => handleDelete('requests', lab.id)} className="text-red-500">
-                      <FaTrash className="text-xl" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+              {renderLabs('requests')}
             </div>
             <h3 className="text-2xl font-bold mb-4 text-black mt-8">Overrides</h3>
             <div className="space-y-4">
-              {labs.overrides.map(lab => (
-                <div key={lab.id} className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-                  <div className='text-black'>{lab.name}</div>
-                  <div className="flex space-x-4">
-                    <FaEllipsisV className="text-xl cursor-pointer" />
-                    <button onClick={() => handleDelete('overrides', lab.id)} className="text-red-500">
-                      <FaTrash className="text-xl" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+              {renderLabs('overrides')}
             </div>
             <div className="flex items-center space-x-2 mt-6">
               <select
@@ -91,17 +139,23 @@ const Admin = () => {
             </div>
           </div>
         );
+
       case 'Dashboard':
-        return <DashboardPage />; // Render the Dashboard component
+        return <DashboardPage />;
       case 'Inventory':
-        return <InventoryPage />; // Render the InventoryPage component
+        return <InventoryPage />;
       case 'Settings':
-        return (
-          <div>
-            <h3 className="text-2xl font-bold mb-4 text-black">Settings</h3>
-            {/* Settings content goes here */}
-          </div>
-        );
+        return <Setting />;
+      case 'Staff_management':
+        return <StaffPage/>;
+      case 'student_management':
+        return <StudentPage />;
+      case 'Course':
+        return <Course />;
+      case 'Department':
+       return <Department />;
+      case 'Profession':
+        return <Profession />;
       default:
         return null;
     }
@@ -116,6 +170,11 @@ const Admin = () => {
           <button onClick={() => setActivePage('Home')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Home' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Home</button>
           <button onClick={() => setActivePage('Dashboard')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Dashboard' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Dashboard</button>
           <button onClick={() => setActivePage('Inventory')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Inventory' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Inventory</button>
+          <button onClick={() => setActivePage('Staff_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Staff_management' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Staff Management</button>
+          <button onClick={() => setActivePage('student_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'student_management' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Student Management</button>
+          <button onClick={() => setActivePage('Course')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Course' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Course</button>
+          <button onClick={() => setActivePage('Department')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Department' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Department</button>
+          <button onClick={() => setActivePage('Profession')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Profession' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Profession</button>
           <button onClick={() => setActivePage('Settings')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Settings' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Settings</button>
         </nav>
       </div>
