@@ -14,7 +14,13 @@
     "url": "https://tailadmin.com"
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.19.1",
+    "@azure/msal-react": "^2.0.21",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.4",
     "apexcharts": "^3.41.0",
+    "axios": "^1.7.2",
     "flatpickr": "^4.6.13",
     "headlessui": "^0.0.0",
     "jsvectormap": "^1.5.3",

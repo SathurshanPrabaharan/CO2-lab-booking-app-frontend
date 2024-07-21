@@ -6,6 +6,7 @@ const Header: React.FC = () => {
   const Links = [
     { name: "Home", link: "/" },
     { name: "Profile", link: "/ProfileUpdate" },
+    { name: "Course", link: "/Course_Update" },
     { name: "Schedule", link: "/Calendar" },
     { name: "Inventory", link: "/Inventory" },
   ];
@@ -15,15 +16,15 @@ const Header: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center p-1">
         <div className="flex items-center gap-5">
           <img
-            className="w-20 md:w-28 md:left-0 p-1 opacity-90"
+            className="w-20 ml-2 md:w-28 md:left-0 p-1 opacity-90"
             src={UoJ_logo}
             alt="Logo"
           />
-          <div className="font-bold text-xl md:text-2xl">
+          <div className="font-bold font-Poppins text-lg md:text-2xl">
             Welcome to Computer Lab 2 Booking System
           </div>
         </div>
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-5 lg:space-x-7 md:mr-1 lg:mr-3">
           {Links.map((link) => (
             <a
               key={link.name}
@@ -40,7 +41,7 @@ const Header: React.FC = () => {
             className="text-white hover:text-gray-400"
           >
             <svg
-              className="w-6 h-6"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -49,7 +50,7 @@ const Header: React.FC = () => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="3"
                 d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
               ></path>
             </svg>
