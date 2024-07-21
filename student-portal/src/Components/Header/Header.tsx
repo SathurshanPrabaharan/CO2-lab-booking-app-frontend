@@ -6,6 +6,7 @@ const Header: React.FC = () => {
   const Links = [
     { name: "Home", link: "/" },
     { name: "Profile", link: "/ProfileUpdate" },
+    { name: "Course", link: "/Course_Update" },
     { name: "Schedule", link: "/Calendar" },
     { name: "Inventory", link: "/Inventory" },
   ];
