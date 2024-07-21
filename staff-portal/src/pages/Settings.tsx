@@ -5,10 +5,16 @@ import { useState } from 'react';
 import Select, { MultiValue, ActionMeta } from 'react-select';
 
 const Settings = () => {
-  const [name, setName] = useState('John Doe');
-  const [role, setRole] = useState('Lecturer');
+  const [firstName, setFirstName] = useState('John');
+  const [lastName, setLastName] = useState('Doe');
+  const [displayName, setDisplayName] = useState('John Doe');
+  const [mobile, setMobile] = useState('123-456-7890');
+  const [gender, setGender] = useState('Male');
+  const [email, setEmail] = useState('john.doe@example.com');
+  const [profession, setProfession] = useState('Lecturer');
   const [department, setDepartment] = useState('Computer Science');
-  const [courses, setCourses] = useState([{ value: 'CS101', label: 'CS101' }]);
+  const [responsibleCourses, setResponsibleCourses] = useState([{ value: 'CS101', label: 'CS101' }]);
+  const [status] = useState('Active'); // Read-only status
   const [isEditing, setIsEditing] = useState(false);
 
   const courseOptions = [
@@ -39,7 +45,7 @@ const Settings = () => {
     newValue: MultiValue<{ value: string; label: string }>,
     actionMeta: ActionMeta<{ value: string; label: string }>
   ) => {
-    setCourses(newValue as { value: string; label: string }[]);
+    setResponsibleCourses(newValue as { value: string; label: string }[]);
   };
 
   return (
@@ -68,15 +74,15 @@ const Settings = () => {
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="name"
+                      htmlFor="firstName"
                     >
-                      Name
+                      First Name
                     </label>
                     <input
-                      id="name"
+                      id="firstName"
                       type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       disabled={!isEditing}
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
@@ -87,14 +93,112 @@ const Settings = () => {
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="role"
+                      htmlFor="lastName"
                     >
-                      Role
+                      Last Name
+                    </label>
+                    <input
+                      id="lastName"
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
+                    />
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="displayName"
+                    >
+                      Display Name
+                    </label>
+                    <input
+                      id="displayName"
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
+                    />
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="mobile"
+                    >
+                      Mobile
+                    </label>
+                    <input
+                      id="mobile"
+                      type="text"
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
+                    />
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="gender"
+                    >
+                      Gender
                     </label>
                     <select
-                      id="role"
-                      value={role}
-                      onChange={(e) => setRole(e.target.value)}
+                      id="gender"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="email"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
+                    />
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="profession"
+                    >
+                      Profession
+                    </label>
+                    <select
+                      id="profession"
+                      value={profession}
+                      onChange={(e) => setProfession(e.target.value)}
                       disabled={!isEditing}
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
@@ -131,19 +235,35 @@ const Settings = () => {
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="courses"
+                      htmlFor="responsibleCourses"
                     >
-                      Courses
+                      Responsible Courses
                     </label>
                     <Select
-                      id="courses"
-                      value={courses}
+                      id="responsibleCourses"
+                      value={responsibleCourses}
                       onChange={handleCoursesChange}
                       options={courseOptions}
                       isMulti
                       isDisabled={!isEditing}
                       classNamePrefix="react-select"
                       className={`react-select-container ${!isEditing ? 'bg-opacity-50' : ''}`}
+                    />
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="status"
+                    >
+                      Status
+                    </label>
+                    <input
+                      id="status"
+                      type="text"
+                      value={status}
+                      disabled
+                      className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black bg-opacity-50 focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white"
                     />
                   </div>
 
