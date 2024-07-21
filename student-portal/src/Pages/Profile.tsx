@@ -97,27 +97,6 @@ const Profile: React.FC = () => {
             </tbody>
           </table>
         </div>
-        <div class="block lg:hidden">
-          <div class="p-6 bg-white dark:bg-slate-200 dark:border-gray-400 hover:bg-gray-300 dark:hover:bg-gray-300">
-            <button
-              onClick={handleClick}
-              className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white md:text-xl md:py-1 md:px-6 rounded-b-lg shadow-lg transform transition-all duration-500 ease-in-out hover:scale-110 hover:brightness-110 hover:animate-pulse active:animate-bounce absolute right-0 bottom-0 mr-4 mb-3 font-Poppins"
-            >
-              Update
-            </button>
-          </div>
-        </div>
-
-        <div class="hidden lg:block">
-          <div>
-            <button
-              onClick={handleClick}
-              className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white md:text-xl md:py-1 md:px-6 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out hover:scale-110 hover:brightness-110 hover:animate-pulse active:animate-bounce absolute right-0 bottom-0 mr-3 mb-3 font-Poppins"
-            >
-              Update
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
