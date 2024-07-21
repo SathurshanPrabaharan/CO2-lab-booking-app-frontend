@@ -164,23 +164,23 @@ const Admin: React.FC = () => {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <div className="bg-slate-800 w-1/4 min-h-full flex flex-col">
+      <div className="bg-slate-500 w-1/4 min-h-full flex flex-col">
         <div className="p-4 text-white text-2xl font-bold">Admin Home Page</div>
         <nav className="flex flex-col space-y-2 p-4">
-          <button onClick={() => setActivePage('Home')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Home' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Home</button>
-          <button onClick={() => setActivePage('Dashboard')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Dashboard' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Dashboard</button>
-          <button onClick={() => setActivePage('Inventory')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Inventory' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Inventory</button>
-          <button onClick={() => setActivePage('Staff_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Staff_management' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Staff Management</button>
-          <button onClick={() => setActivePage('student_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'student_management' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Student Management</button>
-          <button onClick={() => setActivePage('Course')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Course' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Course</button>
-          <button onClick={() => setActivePage('Department')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Department' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Department</button>
-          <button onClick={() => setActivePage('Profession')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Profession' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Profession</button>
-          <button onClick={() => setActivePage('Settings')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Settings' ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-black'}`}>Settings</button>
+          <button onClick={() => setActivePage('Home')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Home' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Home</button>
+          <button onClick={() => setActivePage('Dashboard')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Dashboard' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Dashboard</button>
+          <button onClick={() => setActivePage('Inventory')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Inventory' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Inventory</button>
+          <button onClick={() => setActivePage('Staff_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Staff_management' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Staff Management</button>
+          <button onClick={() => setActivePage('student_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'student_management' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Student Management</button>
+          <button onClick={() => setActivePage('Course')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Course' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Course</button>
+          <button onClick={() => setActivePage('Department')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Department' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Department</button>
+          <button onClick={() => setActivePage('Profession')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Profession' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Profession</button>
+          <button onClick={() => setActivePage('Settings')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Settings' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Settings</button>
         </nav>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-gray-300">
+      <div className="flex-1 p-6 bg-slate-200">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div className="text-xl font-bold text-black">Welcome message!</div>
