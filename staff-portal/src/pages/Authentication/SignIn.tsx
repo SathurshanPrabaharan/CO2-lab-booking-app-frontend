@@ -2,8 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo/logo.svg';
 import Layout from '../../layout/Layout';
+import { useMsal } from '@azure/msal-react';
+import { loginRequest } from '../../authConfig';
 
 const SignIn: React.FC = () => {
+  const { instance } = useMsal();
+
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch(e => {
+      console.error(e);
+    });
+  };
+
   return (
     <Layout>
 
@@ -263,7 +273,7 @@ const SignIn: React.FC = () => {
                   Sign in with Google
                 </button>
 
-                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50 mb-8">
+                <button onClick={handleLogin} className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50 mb-8">
                   <span>
                     <svg
                       width="20"
