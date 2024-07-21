@@ -23,14 +23,6 @@ const ProfileCard: React.FC = () => {
         <p className="text-black mb-5 text-xl md:text-2xl font-semibold">
           Department
         </p>
-        <div className="px-10 pt-8 pb-2">
-          <button
-            onClick={handleClick}
-            className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white text-xl py-1 px-6 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out hover:scale-110 hover:brightness-110 hover:animate-pulse active:animate-bounce absolute right-0 bottom-0"
-          >
-            Edit
-          </button>
-        </div>
       </div>
     </div>
   );
