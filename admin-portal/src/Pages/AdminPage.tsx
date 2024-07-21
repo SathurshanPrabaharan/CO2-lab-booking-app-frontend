@@ -95,7 +95,7 @@ const Admin: React.FC = () => {
                 onClick={(e) => { e.stopPropagation(); handleDelete(type, lab.id); }} 
                 className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-600"
               >
-                <FaTrash className="text-xl" /> Delete
+                <FaTrash className="text-xl" /> Reject
               </button>
             </div>
           </div>
