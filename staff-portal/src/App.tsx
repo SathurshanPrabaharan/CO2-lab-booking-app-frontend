@@ -39,7 +39,16 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Sign In | CO2 Lab Booking System | Staff Portal" />
+              <SignIn/>
+            </>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <PageTitle title="Dashboard | CO2 Lab Booking System | Staff Portal" />
               <Dashboard />
             </>
           }
