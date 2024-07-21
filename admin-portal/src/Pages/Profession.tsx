@@ -68,7 +68,7 @@ const ProfessionPage: React.FC = () => {
         <div className="flex justify-center mb-6">
           <button 
             onClick={handleAddProfession} 
-            className="bg-emerald-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-emerald-700 flex items-center"
+            className="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-emerald-700 flex items-center"
           >
             <FaPlus className="mr-2" /> Add Profession
           </button>
