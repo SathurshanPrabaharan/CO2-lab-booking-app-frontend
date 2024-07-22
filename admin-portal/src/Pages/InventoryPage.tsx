@@ -1,143 +1,192 @@
-import React, { useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
-
-interface InventoryItem {
-  id: number;
-  name: string;
-  quantity: number;
-  isBooked: boolean;
-  department: string;
-}
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import CustomDialog from '../Components/CustomDialog'; // Import the custom dialog
 
 interface Software {
+  id: string;
   name: string;
-  versions: string[];
+  version: string;
+  description: string;
+  category: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string | null;
+  status: string;
 }
 
-const softwareList: Software[] = [
-  { name: 'Software A', versions: ['1.0', '1.1', '2.0'] },
-  { name: 'Software B', versions: ['3.0', '3.1'] },
-  { name: 'Software C', versions: ['4.0', '4.1', '4.2'] },
-];
+interface Computer {
+  id: string;
+  name: string;
+  status: string;
+  serialNum?: string;
+  manufacturer?: string;
+  model?: string;
+  processor?: string;
+  memoryType?: string;
+  memorySize?: string;
+  storageType?: string;
+  storageSize?: string;
+  operatingSystem?: string;
+  purchaseDate?: string;
+  purchaseCost?: string;
+  warrantyExpiry?: string;
+  shortNote?: string;
+  lastMaintenanceDate?: string;
+  nextMaintenanceDate?: string;
+}
 
 const InventoryPage: React.FC = () => {
-  const [inventory, setInventory] = useState<InventoryItem[]>([
-    { id: 1, name: 'Lab Equipment 1', quantity: 5, isBooked: false, department: 'Computer Engineering' },
-    { id: 2, name: 'Lab Equipment 2', quantity: 10, isBooked: false, department: 'Civil Engineering' },
-    { id: 3, name: 'Lab Equipment 3', quantity: 3, isBooked: false, department: 'EE Engineering' },
-  ]);
   const [selectedSoftware, setSelectedSoftware] = useState<string>('');
   const [selectedVersion, setSelectedVersion] = useState<string>('');
+  const [computers, setComputers] = useState<{ id: string; software: string; version: string }[]>([]);
+  const [inventory, setInventory] = useState<Computer[]>([]);
+  const [softwareList, setSoftwareList] = useState<Software[]>([]);
+  const [versions, setVersions] = useState<string[]>([]);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [selectedComputer, setSelectedComputer] = useState<Computer | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const addItem = () => {
-    const newItem: InventoryItem = {
-      id: inventory.length + 1,
-      name: `New Equipment ${inventory.length + 1}`,
-      quantity: 0,
-      isBooked: false,
-      department: 'Computer Engineering',
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const response = await axios.get('http://localhost:8085/api/v1/inventories?page=1&size=999');
+        const { results } = response.data.data;
+        const sortedResults = results.sort((a: Computer, b: Computer) => a.name.localeCompare(b.name));
+        setInventory(sortedResults);
+      } catch (error) {
+        setError('Error fetching inventory data.');
+      }
     };
-    setInventory([...inventory, newItem]);
-  };
 
-  const toggleBooking = (id: number) => {
-    setInventory(
-      inventory.map(item =>
-        item.id === id ? { ...item, isBooked: !item.isBooked } : item
-      )
-    );
-  };
+    const fetchSoftwareList = async () => {
+      try {
+        const response = await axios.get('http://localhost:8085/api/v1/inventories/softwares?page=1&size=999');
+        const { results } = response.data.data;
+        setSoftwareList(results);
+      } catch (error) {
+        setError('Error fetching software list.');
+      }
+    };
 
-  const handleSoftwareChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSoftware(e.target.value);
+    fetchInventory();
+    fetchSoftwareList();
+  }, []);
+
+  const handleSoftwareChange = (software: string) => {
+    setSelectedSoftware(software);
+    const selected = softwareList.filter((s) => s.name === software);
+    const uniqueVersions = Array.from(new Set(selected.map((s) => s.version)));
+    setVersions(uniqueVersions);
     setSelectedVersion('');
   };
 
-  const handleVersionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedVersion(e.target.value);
+  const handleVersionChange = (version: string) => {
+    setSelectedVersion(version);
+  };
+
+  const isSoftwareVersionInstalled = (pc: Computer) => {
+    return computers.some(
+      (computer) => computer.id === pc.id && computer.software === selectedSoftware && computer.version === selectedVersion
+    );
+  };
+
+  const handleComputerClick = (computer: Computer) => {
+    setSelectedComputer(computer);
+  };
+
+  const saveToDatabase = async () => {
+    if (!selectedSoftware || !selectedVersion) {
+      setPopupMessage('Please select software and version.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      await axios.post('http://localhost:8085/api/v1/inventories', { computers });
+      setPopupMessage('Data saved successfully!');
+    } catch (error) {
+      setError('Error saving data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closePopup = () => {
+    setPopupMessage(null);
+    setSelectedComputer(null);
   };
 
   return (
     <div className="container mx-auto bg-white p-4 relative rounded-lg">
-      <div className="background">
-        <div className="cloud cloud1"></div>
-        <div className="cloud cloud2"></div>
-        <div className="line line1"></div>
-        <div className="line line2"></div>
-      </div>
-      <h1 className="text-4xl font-bold mt-4 mb-6 text-black">Lab Inventory</h1>
+      <h2 className="text-4xl font-bold mt-8 mb-4 text-black">Computer Booking System</h2>
+      <hr />
       <div className="mb-4">
         <label htmlFor="software" className="mr-2 text-black">Choose Software:</label>
-        <select
+        <input
           id="software"
           value={selectedSoftware}
-          onChange={handleSoftwareChange}
-          className="border border-gray-300 rounded p-2 mr-4 bg-slate-600"
-        >
-          <option value="">Select Software</option>
-          {softwareList.map(software => (
-            <option key={software.name} value={software.name}>{software.name}</option>
+          onChange={(e) => handleSoftwareChange(e.target.value)}
+          className="border border-gray-300 rounded p-1 mr-4 bg-slate-200 text-black"
+          list="software-list"
+        />
+        <datalist id="software-list">
+          {softwareList.map((software) => (
+            <option key={software.id} value={software.name} />
           ))}
-        </select>
+        </datalist>
 
         <label htmlFor="version" className="mr-2 text-black">Choose Version:</label>
-        <select
+        <input
           id="version"
           value={selectedVersion}
-          onChange={handleVersionChange}
-          className="border border-gray-300 rounded p-2 bg-slate-600"
+          onChange={(e) => handleVersionChange(e.target.value)}
+          className="border border-gray-300 rounded p-1 bg-slate-200 text-black"
           disabled={!selectedSoftware}
-        >
-          <option value="">Select Version</option>
-          {selectedSoftware && softwareList.find(software => software.name === selectedSoftware)?.versions.map(version => (
-            <option key={version} value={version}>{version}</option>
+          list="version-list"
+        />
+        <datalist id="version-list">
+          {versions.map((version, index) => (
+            <option key={index} value={version} />
           ))}
-        </select>
+        </datalist>
       </div>
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {inventory.map((item) => (
-          <div key={item.id} className="bg-slate-100 rounded-lg p-4 shadow-md">
-            <h2 className="text-lg font-semibold  text-gray-600 ">{item.name}</h2>
-            <p className="text-gray-600">Quantity: {item.quantity}</p>
-            <p className="text-gray-600">Department: {item.department}</p>
-            <button
-              className={`${
-                item.isBooked ? 'bg-red-500' : 'bg-slate-500'
-              } text-white px-4 py-2 rounded-md mt-2`}
-              onClick={() => toggleBooking(item.id)}
-            >
-              {item.isBooked ? 'Cancel Booking' : 'Book Item'}
-            </button>
-          </div>
-        ))}
-        <div
-          className="bg-gray-200 rounded-lg p-4 shadow-md flex justify-center items-center cursor-pointer"
-          onClick={addItem}
-        >
-          <FaPlus className="text-xl text-gray-500 mr-2" />
-          <span className="text-gray-500">Add New Item</span>
-        </div>
-      </div>
-      
-      <h2 className="text-4xl font-bold mt-8 mb-4 text-black">Computer Booking System</h2>
-      <div className="grid grid-cols-6 rounded-md gap-4">
-        {Array.from({ length: 70 }, (_, i) => (
+      <div className="grid grid-cols-6 rounded-md gap-4 mb-8">
+        {inventory.map((pc) => (
           <div
-            key={i + 1}
-            className={`p-4 rounded-md text-center cursor-pointer shadow-lg  ${
-              inventory.some(item => item.id === i + 1 && item.isBooked)
-                ? 'bg-red-500 text-white'
-                : 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white'
+            key={pc.id}
+            className={`p-4 rounded-md text-center cursor-pointer shadow-lg ${
+              isSoftwareVersionInstalled(pc)
+                ? 'bg-gradient-to-r from-green-400 to-gray-700 text-white'
+                : 'bg-gradient-to-r from-blue-600 to-gray-700 text-white'
             }`}
-            onClick={() => toggleBooking(i + 1)}
+            onClick={() => handleComputerClick(pc)}
           >
-            Computer {i + 1}
-            {inventory.some(item => item.id === i + 1 && item.isBooked) && (
-              <span> - Booked</span>
+            {pc.name}
+            {isSoftwareVersionInstalled(pc) && (
+              <span> - {selectedSoftware} {selectedVersion}</span>
             )}
           </div>
         ))}
       </div>
+
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
+        onClick={saveToDatabase}
+        disabled={loading}
+      >
+        {loading ? 'Saving...' : 'Save to Database'}
+      </button>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+
+      <CustomDialog
+        open={!!selectedComputer}
+        computer={selectedComputer}
+        onClose={closePopup}
+      />
     </div>
   );
 };
