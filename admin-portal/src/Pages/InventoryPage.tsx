@@ -86,9 +86,9 @@ const InventoryPage: React.FC = () => {
     setSelectedVersion(version);
   };
 
-  const isSoftwareVersionInstalled = (id: string) => {
+  const isSoftwareVersionInstalled = (pc: Computer) => {
     return computers.some(
-      (computer) => computer.id === id && computer.software === selectedSoftware && computer.version === selectedVersion
+      (computer) => computer.id === pc.id && computer.software === selectedSoftware && computer.version === selectedVersion
     );
   };
 
@@ -116,6 +116,7 @@ const InventoryPage: React.FC = () => {
 
   const closePopup = () => {
     setPopupMessage(null);
+    setSelectedComputer(null);
   };
 
   return (
@@ -157,14 +158,14 @@ const InventoryPage: React.FC = () => {
           <div
             key={pc.id}
             className={`p-4 rounded-md text-center cursor-pointer shadow-lg ${
-              isSoftwareVersionInstalled(pc.id)
+              isSoftwareVersionInstalled(pc)
                 ? 'bg-gradient-to-r from-green-400 to-gray-700 text-white'
                 : 'bg-gradient-to-r from-blue-600 to-gray-700 text-white'
             }`}
             onClick={() => handleComputerClick(pc)}
           >
             {pc.name}
-            {isSoftwareVersionInstalled(pc.id) && (
+            {isSoftwareVersionInstalled(pc) && (
               <span> - {selectedSoftware} {selectedVersion}</span>
             )}
           </div>
@@ -183,8 +184,8 @@ const InventoryPage: React.FC = () => {
 
       <CustomDialog
         open={!!selectedComputer}
-        message={selectedComputer ? JSON.stringify(selectedComputer, null, 2) : ''}
-        onClose={() => setSelectedComputer(null)}
+        computer={selectedComputer}
+        onClose={closePopup}
       />
     </div>
   );
