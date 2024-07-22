@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FaUserCog, FaSearch, FaPlus, FaTrash, FaChevronDown, FaChevronUp, FaCheck } from 'react-icons/fa';
-import InventoryPage from './InventoryPage'; // Import the InventoryPage component
-import DashboardPage from './Dashboard'; // Import the Dashboard component
+import InventoryPage from './InventoryPage';
+import DashboardPage from './Dashboard';
 import Setting from './Setting';
 import StudentPage from './StudenrPage';
 import StaffPage from './StaffPage';
@@ -11,25 +12,52 @@ import Profession from './Profession';
 
 const Admin: React.FC = () => {
   const [labs, setLabs] = useState({
-    requests: [
-      { id: 1, name: 'Lab A', description: 'Description for Lab A', accepted: false },
-      { id: 2, name: 'Lab B', description: 'Description for Lab B', accepted: false }
-    ],
-    overrides: [
-      { id: 3, name: 'Lab Y', description: 'Description for Lab Y', accepted: false },
-      { id: 4, name: 'Lab Z', description: 'Description for Lab Z', accepted: false }
-    ]
+    requests: [],
+    overrides: []
   });
 
   const [activePage, setActivePage] = useState('Home');
   const [newLabName, setNewLabName] = useState('');
   const [labType, setLabType] = useState('requests');
-  const [showDescription, setShowDescription] = useState<number | null>(null); // State to manage the description visibility
+  const [showDescription, setShowDescription] = useState<number | null>(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [showRejectPopup, setShowRejectPopup] = useState<boolean | { type: string; id: number }>(false);
+  const [rejectLabId, setRejectLabId] = useState<number | null>(null);
+
+  // Fetch lab requests from the backend API
+  useEffect(() => {
+    const fetchLabs = async () => {
+      try {
+        const response = await axios.get('http://localhost:8087/api/v1/bookings/valid-bookings?bookingStatus=PENDING&page=1&size=10');
+        const fetchedLabs = response.data.data.results.map((lab: any) => ({
+          id: lab.id,
+          name: lab.title,
+          description: lab.description,
+          requirementDescription: lab.requirementDescription,
+          accepted: false,
+          course: lab.course,
+          date: lab.date,
+          startTime: lab.startTime,
+          endTime: lab.endTime,
+          bookingStatus: lab.bookingStatus,
+          status: lab.status
+        }));
+        setLabs(prevLabs => ({
+          ...prevLabs,
+          requests: fetchedLabs
+        }));
+      } catch (error) {
+        console.error('Error fetching lab requests:', error);
+      }
+    };
+
+    fetchLabs();
+  }, []);
 
   const handleDelete = (type: string, id: number) => {
     setLabs({
       ...labs,
-      [type]: labs[type].filter(lab => lab.id !== id)
+      [type]: labs[type].filter((lab: any) => lab.id !== id)
     });
   };
 
@@ -51,8 +79,8 @@ const Admin: React.FC = () => {
     setNewLabName('');
   };
 
-  const handleAccept = (type: string, id: number) => {
-    const labIndex = labs[type].findIndex((lab) => lab.id === id);
+  const handleAccept = async (type: string, id: string) => {
+    const labIndex = labs[type].findIndex((lab: any) => lab.id === id);
 
     if (labIndex !== -1) {
       const updatedLabs = [...labs[type]];
@@ -60,10 +88,45 @@ const Admin: React.FC = () => {
 
       setLabs({
         ...labs,
-        [type]: updatedLabs,
+        [type]: updatedLabs.filter((lab: any) => lab.id !== id) // Remove the lab from the list after accepting
       });
 
-      console.log(`Accepted ${type} with id ${id}`);
+      try {
+        await axios.patch(`http://localhost:8087/api/v1/bookings/valid-bookings/${id}`, {
+          bookingStatus: "APPROVED",
+          rejectReason: null,
+          updatedByAdminId: "9ff82bec-c216-4793-b2b2-6de18041c7e0"
+        });
+        console.log(`Accepted ${type} with id ${id}`);
+      } catch (error) {
+        console.error(`Error updating booking status for ${id}:`, error);
+      }
+    }
+  };
+
+  const handleReject = async (id: number, reason: string) => {
+    const type = 'requests'; // or 'overrides' depending on your use case
+    const labIndex = labs[type].findIndex((lab: any) => lab.id === id);
+
+    if (labIndex !== -1) {
+      const updatedLabs = [...labs[type]];
+      updatedLabs.splice(labIndex, 1); // Remove the rejected lab
+
+      setLabs({
+        ...labs,
+        [type]: updatedLabs
+      });
+
+      try {
+        await axios.patch(`http://localhost:8087/api/v1/bookings/valid-bookings/${id}`, {
+          bookingStatus: "REJECTED",
+          rejectReason: reason,
+          updatedByAdminId: "9ff82bec-c216-4793-b2b2-6de18041c7e0"
+        });
+        console.log(`Rejected ${type} with id ${id}`);
+      } catch (error) {
+        console.error(`Error updating booking status for ${id}:`, error);
+      }
     }
   };
 
@@ -72,7 +135,7 @@ const Admin: React.FC = () => {
   };
 
   const renderLabs = (type: 'requests' | 'overrides') => (
-    labs[type].map(lab => (
+    labs[type].map((lab: any) => (
       <div key={lab.id} className="bg-white p-4 rounded-lg shadow-md">
         <div className="flex justify-between items-center" onClick={() => toggleDescription(lab.id)}>
           <div className='text-black'>{lab.name}</div>
@@ -82,7 +145,11 @@ const Admin: React.FC = () => {
         </div>
         {showDescription === lab.id && (
           <div className="mt-2 text-gray-700">
-            {lab.description}
+            <p>{lab.description}</p>
+            <p><strong>Requirement:</strong> {lab.requirementDescription}</p>
+            <p><strong>Course:</strong> {lab.course.name} ({lab.course.code})</p>
+            <p><strong>Date:</strong> {lab.date}</p>
+            <p><strong>Time:</strong> {lab.startTime} - {lab.endTime}</p>
             <div className="mt-2 flex space-x-2">
               <button 
                 onClick={() => handleAccept(type, lab.id)} 
@@ -92,7 +159,11 @@ const Admin: React.FC = () => {
                 <FaCheck className="text-xl" /> {lab.accepted ? 'Accepted' : 'Accept'}
               </button>
               <button 
-                onClick={(e) => { e.stopPropagation(); handleDelete(type, lab.id); }} 
+                onClick={(e) => { 
+                  e.stopPropagation(); 
+                  setRejectLabId(lab.id); 
+                  setShowRejectPopup(true); 
+                }} 
                 className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-600"
               >
                 <FaTrash className="text-xl" /> Reject
@@ -139,7 +210,6 @@ const Admin: React.FC = () => {
             </div>
           </div>
         );
-
       case 'Dashboard':
         return <DashboardPage />;
       case 'Inventory':
@@ -147,13 +217,13 @@ const Admin: React.FC = () => {
       case 'Settings':
         return <Setting />;
       case 'Staff_management':
-        return <StaffPage/>;
+        return <StaffPage />;
       case 'student_management':
         return <StudentPage />;
       case 'Course':
         return <Course />;
       case 'Department':
-       return <Department />;
+        return <Department />;
       case 'Profession':
         return <Profession />;
       default:
@@ -161,42 +231,61 @@ const Admin: React.FC = () => {
     }
   };
 
+  const RejectPopup: React.FC<{ onClose: () => void; onReject: (id: number, reason: string) => void }> = ({ onClose, onReject }) => {
+    const handleReject = () => {
+      if (rejectLabId !== null && rejectReason.trim()) {
+        onReject(rejectLabId, rejectReason);
+        setRejectReason('');
+        onClose();
+      }
+    };
+
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <h4 className="text-xl font-bold mb-4">Reject Lab Request</h4>
+          <textarea
+            value={rejectReason}
+            onChange={(e) => setRejectReason(e.target.value)}
+            placeholder="Enter rejection reason"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+          <div className="flex space-x-4 mt-4">
+            <button onClick={handleReject} className="bg-red-500 text-white px-4 py-2 rounded-lg">Reject</button>
+            <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded-lg">Cancel</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <div className="bg-slate-500 w-1/4 min-h-full flex flex-col">
-        <div className="p-4 text-white text-2xl font-bold">Admin Home Page</div>
-        <nav className="flex flex-col space-y-2 p-4">
-          <button onClick={() => setActivePage('Home')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Home' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Home</button>
-          <button onClick={() => setActivePage('Dashboard')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Dashboard' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Dashboard</button>
-          <button onClick={() => setActivePage('Inventory')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Inventory' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Inventory</button>
-          <button onClick={() => setActivePage('Staff_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Staff_management' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Staff Management</button>
-          <button onClick={() => setActivePage('student_management')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'student_management' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Student Management</button>
-          <button onClick={() => setActivePage('Course')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Course' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Course</button>
-          <button onClick={() => setActivePage('Department')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Department' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Department</button>
-          <button onClick={() => setActivePage('Profession')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Profession' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Profession</button>
-          <button onClick={() => setActivePage('Settings')} className={`text-left px-4 py-2 rounded-lg ${activePage === 'Settings' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'}`}>Settings</button>
-        </nav>
+      <div className="w-64 bg-gray-800 text-white p-4">
+        <h2 className="text-2xl font-bold mb-4">Admin Panel</h2>
+        <ul>
+          <li onClick={() => setActivePage('Home')} className={`cursor-pointer py-2 px-4 ${activePage === 'Home' ? 'bg-gray-600' : ''}`}>Home</li>
+          <li onClick={() => setActivePage('Dashboard')} className={`cursor-pointer py-2 px-4 ${activePage === 'Dashboard' ? 'bg-gray-600' : ''}`}>Dashboard</li>
+          <li onClick={() => setActivePage('Inventory')} className={`cursor-pointer py-2 px-4 ${activePage === 'Inventory' ? 'bg-gray-600' : ''}`}>Inventory</li>
+          <li onClick={() => setActivePage('Settings')} className={`cursor-pointer py-2 px-4 ${activePage === 'Settings' ? 'bg-gray-600' : ''}`}>Settings</li>
+          <li onClick={() => setActivePage('Staff_management')} className={`cursor-pointer py-2 px-4 ${activePage === 'Staff_management' ? 'bg-gray-600' : ''}`}>Staff Management</li>
+          <li onClick={() => setActivePage('student_management')} className={`cursor-pointer py-2 px-4 ${activePage === 'student_management' ? 'bg-gray-600' : ''}`}>Student Management</li>
+          <li onClick={() => setActivePage('Course')} className={`cursor-pointer py-2 px-4 ${activePage === 'Course' ? 'bg-gray-600' : ''}`}>Course</li>
+          <li onClick={() => setActivePage('Department')} className={`cursor-pointer py-2 px-4 ${activePage === 'Department' ? 'bg-gray-600' : ''}`}>Department</li>
+          <li onClick={() => setActivePage('Profession')} className={`cursor-pointer py-2 px-4 ${activePage === 'Profession' ? 'bg-gray-600' : ''}`}>Profession</li>
+        </ul>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-6 bg-slate-200">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="text-xl font-bold text-black">Welcome message!</div>
-          <div className="flex items-center space-x-4">
-            <input
-              type="text"
-              placeholder="Search"
-              className="px-4 py-2 rounded-full border focus:outline-none"
-            />
-            <FaSearch className="text-xl text-cyan-800" />
-            <FaUserCog className="text-xl text-yellow-600" />
-          </div>
-        </div>
-
-        {/* Render the appropriate content based on the active page */}
+      {/* Main content */}
+      <div className="flex-1 p-4 bg-gray-100">
         {renderContent()}
+        {showRejectPopup && (
+          <RejectPopup 
+            onClose={() => setShowRejectPopup(false)} 
+            onReject={handleReject} 
+          />
+        )}
       </div>
     </div>
   );
