@@ -1,31 +1,46 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 import UserOne from '../../images/user/user-01.png';
 
+const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/066fa2b4-5d28-44eb-a74e-3e44421980e8';
+
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [displayName, setDisplayName] = useState(''); // Define state for displayName
 
-  const trigger = useRef<any>(null);
-  const dropdown = useRef<any>(null);
+  const trigger = useRef<HTMLAnchorElement>(null);
+  const dropdown = useRef<HTMLDivElement>(null);
 
-  // close on click outside
+  // Fetch staff details
+  useEffect(() => {
+    axios.get(STAFF_API_URL)
+      .then(response => {
+        const staff = response.data.data;
+        setDisplayName(staff.displayName || '');
+      })
+      .catch(error => {
+        console.error('Error fetching staff details:', error);
+      });
+  }, []);
+
+  // Close dropdown on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
-      if (!dropdown.current) return;
+      if (!dropdown.current || !trigger.current) return;
       if (
         !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
+        dropdown.current.contains(target as Node) ||
+        trigger.current.contains(target as Node)
+      ) return;
       setDropdownOpen(false);
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
-  });
+  }, [dropdownOpen]);
 
-  // close if the esc key is pressed
+  // Close dropdown on ESC key press
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -33,7 +48,7 @@ const DropdownUser = () => {
     };
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
-  });
+  }, [dropdownOpen]);
 
   return (
     <div className="relative">
@@ -45,9 +60,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {displayName}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">Staff</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -83,7 +98,7 @@ const DropdownUser = () => {
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
-              to="/"
+              to="/dashboard"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
@@ -161,7 +176,10 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <Link
+              to="/"
+              className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            >
           <svg
             className="fill-current"
             width="22"
@@ -180,7 +198,7 @@ const DropdownUser = () => {
             />
           </svg>
           Log Out
-        </button>
+        </Link>
       </div>
       {/* <!-- Dropdown End --> */}
     </div>
