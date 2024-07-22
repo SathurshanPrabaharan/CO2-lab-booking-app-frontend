@@ -64,7 +64,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-        <NavLink to="/">
+        <NavLink to="/dashboard">
           <img src={Logo} alt="Logo" />
         </NavLink>
 
@@ -103,7 +103,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Dashboard --> */}
               <li>
                 <NavLink
-                  to="/"
+                  to="/dashboard"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
