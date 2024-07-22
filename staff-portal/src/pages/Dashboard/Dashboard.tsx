@@ -10,7 +10,7 @@ const Dashboard: React.FC = () => {
   const [totalBookings, setTotalBookings] = useState(0);
   useEffect(() => {
     // Fetch data from API
-    fetch('http://localhost:8087/api/v1/bookings/valid-bookings?page=1&size=10')
+    fetch('http://localhost:8087/api/v1/bookings/valid-bookings?createdByStaffId=066fa2b4-5d28-44eb-a74e-3e44421980e8&page=1&size=10')
       .then(response => response.json())
       .then(data => {
         if (data.message === 'Bookings fetched successfully') {
@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
   return (
     <DefaultLayout>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title="Total Bookings" total={totalBookings} rate="10.00%" levelUp>
+        <CardDataStats title="Total Bookings" total={totalBookings.toString()} rate="10.00%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -111,10 +111,10 @@ const Dashboard: React.FC = () => {
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartThree />
         <ChartTwo />
-        <div className="col-span-12 xl:col-span-8">
+        <div className="col-span-12 ">
           <TableOne />
         </div>
-        <ChatCard />
+        {/* <ChatCard /> */}
       </div>
     </DefaultLayout>
   );

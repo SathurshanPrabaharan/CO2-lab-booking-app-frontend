@@ -24,7 +24,7 @@ const TableOne = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:8087/api/v1/bookings/valid-bookings?page=1&size=10')
+    axios.get('http://localhost:8087/api/v1/bookings/valid-bookings?createdByStaffId=066fa2b4-5d28-44eb-a74e-3e44421980e8&page=1&size=10')
       .then((response) => {
         setBookings(response.data.data.results);
         setLoading(false);
