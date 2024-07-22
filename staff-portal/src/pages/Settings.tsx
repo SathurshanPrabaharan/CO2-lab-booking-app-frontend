@@ -6,7 +6,7 @@ import Select, { MultiValue, ActionMeta } from 'react-select';
 import axios from 'axios';
 
 const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/066fa2b4-5d28-44eb-a74e-3e44421980e8';
-const COURSE_API_URL = 'http://localhost:8086/api/v1/configurations/courses?page=1&size=10';
+const COURSE_API_URL = 'http://localhost:8086/api/v1/configurations/courses?page=1&size=10'
 
 const Settings = () => {
   const [firstName, setFirstName] = useState('');
@@ -22,17 +22,8 @@ const Settings = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [savedData, setSavedData] = useState<any>(null);  // Added state for saved data
 
-  const courseOptions = [
-    { value: 'CS101', label: 'CS101' },
-    { value: 'CS102', label: 'CS102' },
-    { value: 'CS103', label: 'CS103' },
-    { value: 'CS104', label: 'CS104' },
-    { value: 'EEE101', label: 'EEE101' },
-    { value: 'EEE102', label: 'EEE102' },
-    { value: 'ME101', label: 'ME101' },
-    { value: 'CE101', label: 'CE101' },
-  ];
-  
+  const [courseOptions, setCourseOptions] = useState<{ value: string; label: string }[]>([]);
+
 
   useEffect(() => {
     axios.get(STAFF_API_URL)
@@ -57,6 +48,23 @@ const Settings = () => {
       });
   }, []);
 
+  useEffect(() => {
+    // Fetch course options
+    axios.get(COURSE_API_URL)
+      .then(response => {
+        const courses = response.data.data.results;
+        const options = courses.map((course: { id: string, code: string }) => ({
+          value: course.id,
+          label: course.code
+        }));
+        setCourseOptions(options);
+      })
+      .catch(error => {
+        console.error('Error fetching course details:', error);
+      });
+  }, []);
+  
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -67,17 +75,27 @@ const Settings = () => {
 
   const handleSaveClick = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const responsibleCourseIds= responsibleCourses.map((course) => course.value);
     
     const updatedData = {
-      ...savedData,
       firstName,
       lastName,
       displayName,
       mobile,
-      contact_email: email,
-      responsibleCourses: responsibleCourses.map((course) => course.value),
+      gender: savedData.gender,
       userRoleId: savedData.userRole.id,
-      updatedBy: savedData.id
+      professionId: savedData.profession ? savedData.profession.id : null,
+      departmendId: savedData.department ? savedData.department.id : null,
+      responsibleCourseIds,
+      contact_email: email,
+      photoUrl: savedData.photoUrl,
+      isInitalLogged: savedData.isInitalLogged,
+      verifyToken: savedData.verifyToken,
+      tokenIssuedAt: savedData.tokenIssuedAt,
+      status: savedData.status,
+      updatedBy: savedData.id,
+      wantToEnableAccount: false
     };
   
     console.log('Updated Data:', updatedData);  // Log the data being sent

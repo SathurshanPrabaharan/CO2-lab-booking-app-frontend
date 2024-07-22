@@ -1,46 +1,54 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-interface LabBooking {
-  id: number;
-  date: string;
-  time: string;
-  courseCode: string;
-  labName: string;
-  approved: boolean;
+interface Course {
+  id: string;
+  code: string;
+  name: string;
+  courseType: string;
+  department: string;
+  semester: number;
 }
 
-const labBookings: LabBooking[] = [
-  {
-    id: 1,
-    date: '2024-06-15',
-    time: '10:00 AM',
-    courseCode: 'CS101',
-    labName: 'Physics Lab',
-    approved: true,
-  },
-  {
-    id: 2,
-    date: '2024-06-17',
-    time: '2:00 PM',
-    courseCode: 'MATH201',
-    labName: 'Chemistry Lab',
-    approved: false,
-  },
-];
+interface LabBooking {
+  id: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  course: Course;
+  bookingStatus: string;
+}
 
 const TableOne = () => {
-  const [bookings, setBookings] = useState<LabBooking[]>(labBookings);
+  const [bookings, setBookings] = useState<LabBooking[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const cancelBooking = (id: number) => {
+  useEffect(() => {
+    axios.get('http://localhost:8087/api/v1/bookings/valid-bookings?page=1&size=10')
+      .then((response) => {
+        setBookings(response.data.data.results);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching bookings:', error);
+        setLoading(false);
+      });
+  }, []);
+
+  const cancelBooking = (id: string) => {
     setBookings((prevBookings) =>
       prevBookings.filter((booking) => booking.id !== id)
     );
   };
 
-  const rebook = (id: number) => {
+  const rebook = (id: string) => {
     // Add rebooking logic here
     console.log('Rebooking lab with ID:', id);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -56,7 +64,10 @@ const TableOne = () => {
             </h5>
           </div>
           <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Time</h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Start Time</h5>
+          </div>
+          <div className="p-2.5 xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">End Time</h5>
           </div>
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
@@ -65,14 +76,11 @@ const TableOne = () => {
           </div>
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Lab Name
+              Course Name
             </h5>
           </div>
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Status</h5>
-          </div>
-          <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Actions</h5>
           </div>
         </div>
 
@@ -86,39 +94,26 @@ const TableOne = () => {
               <p className="text-black dark:text-white">{booking.date}</p>
             </div>
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
-              <span className="block sm:hidden font-medium">Time:</span>
-              <p className="text-black dark:text-white">{booking.time}</p>
+              <span className="block sm:hidden font-medium">Start Time:</span>
+              <p className="text-black dark:text-white">{booking.startTime}</p>
+            </div>
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">End Time:</span>
+              <p className="text-black dark:text-white">{booking.endTime}</p>
             </div>
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
               <span className="block sm:hidden font-medium">Course Code:</span>
-              <p className="text-black dark:text-white">{booking.courseCode}</p>
+              <p className="text-black dark:text-white">{booking.course.code}</p>
             </div>
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
-              <span className="block sm:hidden font-medium">Lab Name:</span>
-              <p className="text-black dark:text-white">{booking.labName}</p>
+              <span className="block sm:hidden font-medium">Course Name:</span>
+              <p className="text-black dark:text-white">{booking.course.name}</p>
             </div>
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
               <span className="block sm:hidden font-medium">Status:</span>
               <p className="text-black dark:text-white">
-                {booking.approved ? 'Approved' : 'Pending'}
+                {booking.bookingStatus}
               </p>
-            </div>
-            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
-              {booking.approved ? (
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded"
-                  onClick={() => cancelBooking(booking.id)}
-                >
-                  Cancel
-                </button>
-              ) : (
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 rounded"
-                  onClick={() => rebook(booking.id)}
-                >
-                  Rebook
-                </button>
-              )}
             </div>
           </div>
         ))}

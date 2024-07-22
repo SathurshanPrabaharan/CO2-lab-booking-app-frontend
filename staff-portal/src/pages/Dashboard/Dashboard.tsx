@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CardDataStats from '../../components/CardDataStats';
-import ChartOne from '../../components/Charts/ChartOne';
 import ChartThree from '../../components/Charts/ChartThree';
 import ChartTwo from '../../components/Charts/ChartTwo';
 import ChatCard from '../../components/Chat/ChatCard';
-import MapOne from '../../components/Maps/MapOne';
 import TableOne from '../../components/Tables/TableOne';
 import DefaultLayout from '../../layout/DefaultLayout';
 
 const Dashboard: React.FC = () => {
+  const [totalBookings, setTotalBookings] = useState(0);
+  useEffect(() => {
+    // Fetch data from API
+    fetch('http://localhost:8087/api/v1/bookings/valid-bookings?page=1&size=10')
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Bookings fetched successfully') {
+          setTotalBookings(data.data.total);
+        }
+      })
+      .catch(error => console.error('Error fetching bookings:', error));
+  }, []);
   return (
     <DefaultLayout>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title="Total Bookings" total="20" rate="10.00%" levelUp>
+        <CardDataStats title="Total Bookings" total={totalBookings} rate="10.00%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="22"
