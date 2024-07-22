@@ -1,21 +1,26 @@
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import userThree from '../images/user/user-03.png';
 import DefaultLayout from '../layout/DefaultLayout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Select, { MultiValue, ActionMeta } from 'react-select';
+import axios from 'axios';
+
+const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/066fa2b4-5d28-44eb-a74e-3e44421980e8';
+const COURSE_API_URL = 'http://localhost:8086/api/v1/configurations/courses?page=1&size=10';
 
 const Settings = () => {
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [displayName, setDisplayName] = useState('John Doe');
-  const [mobile, setMobile] = useState('123-456-7890');
-  const [gender, setGender] = useState('Male');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [profession, setProfession] = useState('Lecturer');
-  const [department, setDepartment] = useState('Computer Science');
-  const [responsibleCourses, setResponsibleCourses] = useState([{ value: 'CS101', label: 'CS101' }]);
-  const [status] = useState('Active'); // Read-only status
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [gender, setGender] = useState('');
+  const [email, setEmail] = useState('');
+  const [profession, setProfession] = useState('');
+  const [department, setDepartment] = useState('');
+  const [responsibleCourses, setResponsibleCourses] = useState<MultiValue<{ value: string; label: string }>>([]);
+  const [status, setStatus] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [savedData, setSavedData] = useState<any>(null);  // Added state for saved data
 
   const courseOptions = [
     { value: 'CS101', label: 'CS101' },
@@ -27,6 +32,30 @@ const Settings = () => {
     { value: 'ME101', label: 'ME101' },
     { value: 'CE101', label: 'CE101' },
   ];
+  
+
+  useEffect(() => {
+    axios.get(STAFF_API_URL)
+      .then(response => {
+        const staff = response.data.data;
+        setSavedData(staff);  // Save the response data
+
+        // Populate the form fields with the saved data
+        setFirstName(staff.firstName || '');
+        setLastName(staff.lastName || '');
+        setDisplayName(staff.displayName || '');
+        setMobile(staff.mobile || '');
+        setGender(staff.gender || '');
+        setEmail(staff.contact_email || '');
+        setProfession(staff.profession || '');
+        setDepartment(staff.department || '');
+        setResponsibleCourses(staff.responsibleCourses.map((course: string) => ({ value: course, label: course })));
+        setStatus(staff.status || '');
+      })
+      .catch(error => {
+        console.error('Error fetching staff details:', error);
+      });
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -38,8 +67,31 @@ const Settings = () => {
 
   const handleSaveClick = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsEditing(false);
+    
+    const updatedData = {
+      ...savedData,
+      firstName,
+      lastName,
+      displayName,
+      mobile,
+      contact_email: email,
+      responsibleCourses: responsibleCourses.map((course) => course.value),
+      userRoleId: savedData.userRole.id,
+      updatedBy: savedData.id
+    };
+  
+    console.log('Updated Data:', updatedData);  // Log the data being sent
+  
+    axios.put(`${STAFF_API_URL}`, updatedData)
+      .then(() => {
+        setIsEditing(false);
+        // Optionally refresh the data or show a success message
+      })
+      .catch(error => {
+        console.error('Error saving staff details:', error);
+      });
   };
+  
 
   const handleCoursesChange = (
     newValue: MultiValue<{ value: string; label: string }>,
@@ -154,19 +206,16 @@ const Settings = () => {
                     >
                       Gender
                     </label>
-                    <select
+                    <input
                       id="gender"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
-                      disabled={!isEditing}
+                      disabled
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
                       }`}
                     >
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
+                    </input>
                   </div>
 
                   <div className="mb-5.5">
@@ -195,18 +244,16 @@ const Settings = () => {
                     >
                       Profession
                     </label>
-                    <select
+                    <input
                       id="profession"
+                      type="text"
                       value={profession}
                       onChange={(e) => setProfession(e.target.value)}
                       disabled={!isEditing}
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
                       }`}
-                    >
-                      <option value="Lecturer">Lecturer</option>
-                      <option value="Instructor">Instructor</option>
-                    </select>
+                    />
                   </div>
 
                   <div className="mb-5.5">
@@ -216,20 +263,16 @@ const Settings = () => {
                     >
                       Department
                     </label>
-                    <select
+                    <input
                       id="department"
+                      type="text"
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
                       disabled={!isEditing}
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
                       }`}
-                    >
-                      <option value="Computer Science">Computer Science</option>
-                      <option value="EEE">EEE</option>
-                      <option value="Civil">Civil</option>
-                      <option value="Mechanical">Mechanical</option>
-                    </select>
+                    />
                   </div>
 
                   <div className="mb-5.5">
@@ -241,13 +284,14 @@ const Settings = () => {
                     </label>
                     <Select
                       id="responsibleCourses"
+                      isDisabled={!isEditing}
+                      isMulti
+                      options={courseOptions}
                       value={responsibleCourses}
                       onChange={handleCoursesChange}
-                      options={courseOptions}
-                      isMulti
-                      isDisabled={!isEditing}
-                      classNamePrefix="react-select"
-                      className={`react-select-container ${!isEditing ? 'bg-opacity-50' : ''}`}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
                     />
                   </div>
 
@@ -262,28 +306,34 @@ const Settings = () => {
                       id="status"
                       type="text"
                       value={status}
-                      disabled
-                      className="w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black bg-opacity-50 focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white"
+                      onChange={(e) => setStatus(e.target.value)}
+                      disabled={!isEditing}
+                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
+                        !isEditing ? 'bg-opacity-50' : ''
+                      }`}
                     />
                   </div>
 
-                  {isEditing && (
-                    <div className="flex justify-end gap-4.5">
-                      <button
-                        className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
-                        type="button"
-                        onClick={handleCancelClick}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
-                        type="submit"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  )}
+                  <div className="flex items-center justify-end space-x-4">
+                    {isEditing && (
+                      <>
+                        <button
+                          type="submit"
+                          className="px-4 py-2 rounded bg-primary text-white hover:bg-opacity-90"
+                          onClick={handleSaveClick}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="px-4 py-2 rounded bg-primary text-white hover:bg-opacity-90"
+                          onClick={handleCancelClick}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </form>
               </div>
             </div>
@@ -381,6 +431,7 @@ const Settings = () => {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </DefaultLayout>
