@@ -1,62 +1,122 @@
-// InventoryPage.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomDialog from '../Components/CustomDialog'; // Import the custom dialog
 
 interface Software {
+  id: string;
   name: string;
-  versions: string[];
+  version: string;
+  description: string;
+  category: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string | null;
+  status: string;
+}
+
+interface Computer {
+  id: string;
+  name: string;
+  status: string;
+  serialNum?: string;
+  manufacturer?: string;
+  model?: string;
+  processor?: string;
+  memoryType?: string;
+  memorySize?: string;
+  storageType?: string;
+  storageSize?: string;
+  operatingSystem?: string;
+  purchaseDate?: string;
+  purchaseCost?: string;
+  warrantyExpiry?: string;
+  shortNote?: string;
+  lastMaintenanceDate?: string;
+  nextMaintenanceDate?: string;
 }
 
 const InventoryPage: React.FC = () => {
   const [selectedSoftware, setSelectedSoftware] = useState<string>('');
   const [selectedVersion, setSelectedVersion] = useState<string>('');
-  const [computers, setComputers] = useState<{ id: number; software: string; version: string }[]>([]);
+  const [computers, setComputers] = useState<{ id: string; software: string; version: string }[]>([]);
+  const [inventory, setInventory] = useState<Computer[]>([]);
+  const [softwareList, setSoftwareList] = useState<Software[]>([]);
+  const [versions, setVersions] = useState<string[]>([]);
   const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [selectedComputer, setSelectedComputer] = useState<Computer | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSoftwareChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedSoftware(e.target.value);
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const response = await axios.get('http://localhost:8085/api/v1/inventories?page=1&size=999');
+        const { results } = response.data.data;
+        const sortedResults = results.sort((a: Computer, b: Computer) => a.name.localeCompare(b.name));
+        setInventory(sortedResults);
+      } catch (error) {
+        setError('Error fetching inventory data.');
+      }
+    };
+
+    const fetchSoftwareList = async () => {
+      try {
+        const response = await axios.get('http://localhost:8085/api/v1/inventories/softwares?page=1&size=999');
+        const { results } = response.data.data;
+        setSoftwareList(results);
+      } catch (error) {
+        setError('Error fetching software list.');
+      }
+    };
+
+    fetchInventory();
+    fetchSoftwareList();
+  }, []);
+
+  const handleSoftwareChange = (software: string) => {
+    setSelectedSoftware(software);
+    const selected = softwareList.filter((s) => s.name === software);
+    const uniqueVersions = Array.from(new Set(selected.map((s) => s.version)));
+    setVersions(uniqueVersions);
     setSelectedVersion('');
   };
 
-  const handleVersionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedVersion(e.target.value);
+  const handleVersionChange = (version: string) => {
+    setSelectedVersion(version);
   };
 
-  const isSoftwareVersionInstalled = (id: number) => {
+  const isSoftwareVersionInstalled = (pc: Computer) => {
     return computers.some(
-      (computer) => computer.id === id && computer.software === selectedSoftware && computer.version === selectedVersion
+      (computer) => computer.id === pc.id && computer.software === selectedSoftware && computer.version === selectedVersion
     );
   };
 
-  const handleComputerClick = (id: number) => {
-    setComputers((prev) => {
-      const isSelected = prev.some(
-        (computer) => computer.id === id && computer.software === selectedSoftware && computer.version === selectedVersion
-      );
-
-      if (isSelected) {
-        return prev.filter((computer) => !(computer.id === id && computer.software === selectedSoftware && computer.version === selectedVersion));
-      } else {
-        return [
-          ...prev,
-          { id, software: selectedSoftware, version: selectedVersion },
-        ];
-      }
-    });
+  const handleComputerClick = (computer: Computer) => {
+    setSelectedComputer(computer);
   };
 
   const saveToDatabase = async () => {
+    if (!selectedSoftware || !selectedVersion) {
+      setPopupMessage('Please select software and version.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
     try {
-      const response = await axios.post('YOUR_API_ENDPOINT', { computers });
+      await axios.post('http://localhost:8085/api/v1/inventories', { computers });
       setPopupMessage('Data saved successfully!');
     } catch (error) {
-      setPopupMessage('Error saving data.');
+      setError('Error saving data.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const closePopup = () => {
     setPopupMessage(null);
+    setSelectedComputer(null);
   };
 
   return (
@@ -68,32 +128,44 @@ const InventoryPage: React.FC = () => {
         <input
           id="software"
           value={selectedSoftware}
-          onChange={handleSoftwareChange}
+          onChange={(e) => handleSoftwareChange(e.target.value)}
           className="border border-gray-300 rounded p-1 mr-4 bg-slate-200 text-black"
+          list="software-list"
         />
+        <datalist id="software-list">
+          {softwareList.map((software) => (
+            <option key={software.id} value={software.name} />
+          ))}
+        </datalist>
 
         <label htmlFor="version" className="mr-2 text-black">Choose Version:</label>
         <input
           id="version"
           value={selectedVersion}
-          onChange={handleVersionChange}
+          onChange={(e) => handleVersionChange(e.target.value)}
           className="border border-gray-300 rounded p-1 bg-slate-200 text-black"
           disabled={!selectedSoftware}
+          list="version-list"
         />
+        <datalist id="version-list">
+          {versions.map((version, index) => (
+            <option key={index} value={version} />
+          ))}
+        </datalist>
       </div>
       <div className="grid grid-cols-6 rounded-md gap-4 mb-8">
-        {Array.from({ length: 70 }, (_, i) => (
+        {inventory.map((pc) => (
           <div
-            key={i + 1}
+            key={pc.id}
             className={`p-4 rounded-md text-center cursor-pointer shadow-lg ${
-              isSoftwareVersionInstalled(i + 1)
+              isSoftwareVersionInstalled(pc)
                 ? 'bg-gradient-to-r from-green-400 to-gray-700 text-white'
                 : 'bg-gradient-to-r from-blue-600 to-gray-700 text-white'
             }`}
-            onClick={() => handleComputerClick(i + 1)}
+            onClick={() => handleComputerClick(pc)}
           >
-            Computer {i + 1}
-            {isSoftwareVersionInstalled(i + 1) && (
+            {pc.name}
+            {isSoftwareVersionInstalled(pc) && (
               <span> - {selectedSoftware} {selectedVersion}</span>
             )}
           </div>
@@ -103,13 +175,16 @@ const InventoryPage: React.FC = () => {
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
         onClick={saveToDatabase}
+        disabled={loading}
       >
-        Save to Database
+        {loading ? 'Saving...' : 'Save to Database'}
       </button>
 
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+
       <CustomDialog
-        open={popupMessage !== null}
-        message={popupMessage || ''}
+        open={!!selectedComputer}
+        computer={selectedComputer}
         onClose={closePopup}
       />
     </div>
