@@ -52,14 +52,37 @@ const StudentManagement: React.FC = () => {
     setLoading(true);
     setError(null);
 
+    // Default values
+    const defaultValues = {
+      userRoleId: 'a6270bcb-383a-4286-b4bc-03f5d0c00333',
+      createdBy: '2d13296c-7d3b-4496-b049-4848b5e07402',
+      departmentId: 'fca6615e-b585-49e5-a849-b7ec31fd8f1d',
+      currentCourseIds: [
+        '59060101-54ea-4c0e-aa5c-f4eca08b4ecc',
+        'b3962fa5-bc56-43dd-b370-50112c86858a'
+      ],
+      professionId: '8c64bbdd-f562-4291-8ddf-58c80d310c52'
+    };
+
     try {
-      const response = await axios.post('http://localhost:8084/api/v1/users/students', newStudent);
-      const addedStudent = response.data.data; // Assuming the API returns the created student
+      const response = await axios.post('http://localhost:8084/api/v1/users/students', {
+        ...newStudent,
+        ...defaultValues
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const addedStudent = response.data.data;
       setStudents(prevState => [...prevState, addedStudent]);
       setNewStudent({});
-      setShowForm(false); // Hide the form after adding
+      setShowForm(false);
     } catch (error) {
-      setError('Error adding new student.');
+      if (error.response) {
+        setError(`Error: ${error.response.data.errors.join(', ')}`);
+      } else {
+        setError('Error adding new student.');
+      }
     } finally {
       setLoading(false);
     }
@@ -74,7 +97,7 @@ const StudentManagement: React.FC = () => {
         {/* Add Student Form */}
         <div className="mb-8">
           <button
-            onClick={() => setShowForm(prev => !prev)} // Toggle form visibility
+            onClick={() => setShowForm(prev => !prev)}
             className="text-lg bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
           >
             {showForm ? 'Hide Form' : 'Add New Student'}
@@ -83,7 +106,6 @@ const StudentManagement: React.FC = () => {
             <div className="mt-4">
               <h3 className="text-2xl mb-4 text-black">Add New Student</h3>
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Form fields here */}
                 <div>
                   <label className="block text-black">First Name</label>
                   <input
@@ -92,6 +114,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.firstName || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -102,6 +125,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.lastName || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -112,6 +136,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.displayName || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -122,6 +147,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.mobile || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -132,26 +158,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.gender || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">User Role ID</label>
-                  <input
-                    type="text"
-                    name="userRoleId"
-                    value={newStudent.userRoleId || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Profession ID</label>
-                  <input
-                    type="text"
-                    name="professionId"
-                    value={newStudent.professionId || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -162,6 +169,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.semester || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -172,38 +180,7 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.regNum || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Department ID</label>
-                  <input
-                    type="text"
-                    name="departmentId"
-                    value={newStudent.departmentId || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Current Course IDs (comma separated)</label>
-                  <input
-                    type="text"
-                    name="currentCourseIds"
-                    value={newStudent.currentCourseIds?.join(', ') || ''}
-                    onChange={(e) =>
-                      setNewStudent(prevState => ({ ...prevState, currentCourseIds: e.target.value.split(', ') }))
-                    }
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">User Principal Name</label>
-                  <input
-                    type="text"
-                    name="userPrincipalName"
-                    value={newStudent.userPrincipalName || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -214,24 +191,15 @@ const StudentManagement: React.FC = () => {
                     value={newStudent.tempPassword || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
-                  <label className="block text-black">Photo URL</label>
+                  <label className="block text-black">Principal Name</label>
                   <input
                     type="text"
-                    name="photoUrl"
-                    value={newStudent.photoUrl || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Created By</label>
-                  <input
-                    type="text"
-                    name="createdBy"
-                    value={newStudent.createdBy || ''}
+                    name="userPrincipalName"
+                    value={newStudent.userPrincipalName}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
                   />
@@ -260,10 +228,10 @@ const StudentManagement: React.FC = () => {
                 <p className="text-lg text-black">Semester: {student.semester}</p>
               </div>
               <div className="flex space-x-2">
-                <button className="text-blue-500 hover:text-blue-700">
+                <button className="text-blue-600 hover:text-blue-800">
                   <FaEdit />
                 </button>
-                <button className="text-red-500 hover:text-red-700">
+                <button className="text-red-600 hover:text-red-800">
                   <FaTrash />
                 </button>
               </div>
