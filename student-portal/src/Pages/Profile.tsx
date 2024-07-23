@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileCard from "../Components/ProfileCard";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
 const Profile: React.FC = () => {
-  const navigate = useNavigate();
-
   const handleClick = () => {
     navigate("Course_Update");
   };

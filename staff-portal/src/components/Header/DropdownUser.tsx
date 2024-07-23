@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useMsal } from '@azure/msal-react';
+import { loginRequest } from '../../authConfig';
 
 import UserOne from '../../images/user/user-01.png';
 
-const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/066fa2b4-5d28-44eb-a74e-3e44421980e8';
+const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/4a2ca96b-a846-476a-b8df-d5007af084fb';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -12,6 +14,15 @@ const DropdownUser = () => {
 
   const trigger = useRef<HTMLAnchorElement>(null);
   const dropdown = useRef<HTMLDivElement>(null);
+
+
+  const { instance } = useMsal();
+
+  
+  const handleLogout = () => {
+        
+    instance.logoutRedirect();
+}
 
   // Fetch staff details
   useEffect(() => {
@@ -176,8 +187,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <Link
-              to="/"
+        <button onClick={handleLogout}
               className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
           <svg
@@ -198,7 +208,7 @@ const DropdownUser = () => {
             />
           </svg>
           Log Out
-        </Link>
+        </button>
       </div>
       {/* <!-- Dropdown End --> */}
     </div>

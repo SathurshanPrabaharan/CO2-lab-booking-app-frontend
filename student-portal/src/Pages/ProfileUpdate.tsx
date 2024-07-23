@@ -60,7 +60,7 @@ const ProfileUpdate = () => {
                   className="mb-3 mt-3 block text-xl font-medium text-black"
                   htmlFor="course"
                 >
-                  Course
+                  Semester
                 </label>
                 <select
                   value={semester}

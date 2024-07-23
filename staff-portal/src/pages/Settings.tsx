@@ -6,7 +6,7 @@ import Select, { MultiValue, ActionMeta } from 'react-select';
 import axios from 'axios';
 
 
-const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/066fa2b4-5d28-44eb-a74e-3e44421980e8';
+const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/4a2ca96b-a846-476a-b8df-d5007af084fb';
 const COURSE_API_URL = 'http://localhost:8086/api/v1/configurations/courses?page=1&size=10'
 
 
@@ -40,8 +40,8 @@ const Settings = () => {
         setMobile(staff.mobile || '');
         setGender(staff.gender || '');
         setEmail(staff.contact_email || '');
-        setProfession(staff.profession || '');
-        setDepartment(staff.department || '');
+        setProfession(staff.profession ? staff.profession.name : null);
+        setDepartment(staff.department? staff.department.name : null);
         setResponsibleCourses(staff.responsibleCourses.map((course: string) => ({ value: course, label: course })));
         setStatus(staff.status || '');
       })
@@ -269,7 +269,7 @@ const Settings = () => {
                       type="text"
                       value={profession}
                       onChange={(e) => setProfession(e.target.value)}
-                      disabled={!isEditing}
+                      disabled
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
                       }`}
@@ -288,7 +288,7 @@ const Settings = () => {
                       type="text"
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
-                      disabled={!isEditing}
+                      disabled
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
                       }`}
