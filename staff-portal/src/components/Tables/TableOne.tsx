@@ -17,6 +17,7 @@ interface LabBooking {
   endTime: string;
   course: Course;
   bookingStatus: string;
+  title: string;
 }
 
 const TableOne = () => {
@@ -24,7 +25,7 @@ const TableOne = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:8087/api/v1/bookings/valid-bookings?createdByStaffId=066fa2b4-5d28-44eb-a74e-3e44421980e8&page=1&size=10')
+    axios.get('http://localhost:8087/api/v1/bookings/valid-bookings?createdByStaffId=4a2ca96b-a846-476a-b8df-d5007af084fb&page=1&size=10')
       .then((response) => {
         setBookings(response.data.data.results);
         setLoading(false);
@@ -80,6 +81,11 @@ const TableOne = () => {
             </h5>
           </div>
           <div className="p-2.5 xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Lab Name
+            </h5>
+          </div>
+          <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Status</h5>
           </div>
         </div>
@@ -108,6 +114,10 @@ const TableOne = () => {
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
               <span className="block sm:hidden font-medium">Course Name:</span>
               <p className="text-black dark:text-white">{booking.course.name}</p>
+            </div>
+            <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
+              <span className="block sm:hidden font-medium">Title:</span>
+              <p className="text-black dark:text-white">{booking.title}</p>
             </div>
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
               <span className="block sm:hidden font-medium">Status:</span>
