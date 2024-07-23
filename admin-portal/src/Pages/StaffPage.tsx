@@ -51,9 +51,24 @@ const StaffPage: React.FC = () => {
     setLoading(true);
     setError(null);
 
+    // Default values
+    const defaultValues = {
+      userRoleId: '6cb73460-199a-4553-b993-b271a65b0536',
+      createdBy: '2d13296c-7d3b-4496-b049-4848b5e07402',
+      departmentId: 'fca6615e-b585-49e5-a849-b7ec31fd8f1d',
+      responsibleCourseIds: [
+        '59060101-54ea-4c0e-aa5c-f4eca08b4ecc',
+        'b3962fa5-bc56-43dd-b370-50112c86858a'
+      ],
+      professionId: '8c64bbdd-f562-4291-8ddf-58c80d310c52'
+    };
+
     try {
       if (currentStaff) {
-        const response = await axios.post('http://localhost:8084/api/v1/users/staffs', currentStaff);
+        const response = await axios.post('http://localhost:8084/api/v1/users/staffs', {
+          ...currentStaff,
+          ...defaultValues
+        });
         const addedStaff = response.data.data;
         setStaffDetails(prevState => [...prevState, addedStaff]);
         setCurrentStaff(null);
@@ -93,14 +108,17 @@ const StaffPage: React.FC = () => {
       displayName: '',
       mobile: '',
       gender: '',
-      userRoleId: '',
-      professionId: '',
-      departmentId: '',
-      responsibleCourseIds: [],
+      userRoleId: '6cb73460-199a-4553-b993-b271a65b0536',
+      professionId: '8c64bbdd-f562-4291-8ddf-58c80d310c52',
+      departmentId: 'fca6615e-b585-49e5-a849-b7ec31fd8f1d',
+      responsibleCourseIds: [
+        '59060101-54ea-4c0e-aa5c-f4eca08b4ecc',
+        'b3962fa5-bc56-43dd-b370-50112c86858a'
+      ],
       userPrincipalName: '',
       tempPassword: '',
       photoUrl: '',
-      createdBy: ''
+      createdBy: '2d13296c-7d3b-4496-b049-4848b5e07402'
     });
     setShowForm(true);
   };
@@ -132,6 +150,7 @@ const StaffPage: React.FC = () => {
                     value={currentStaff?.firstName || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -142,6 +161,7 @@ const StaffPage: React.FC = () => {
                     value={currentStaff?.lastName || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -152,6 +172,7 @@ const StaffPage: React.FC = () => {
                     value={currentStaff?.displayName || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -162,6 +183,7 @@ const StaffPage: React.FC = () => {
                     value={currentStaff?.mobile || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
                 <div>
@@ -172,25 +194,49 @@ const StaffPage: React.FC = () => {
                     value={currentStaff?.gender || ''}
                     onChange={handleInputChange}
                     className="border p-2 w-full text-black bg-gray-100"
+                    required
                   />
                 </div>
+                <div>
+                  <label className="block text-black">User Principal Name</label>
+                  <input
+                    type="text"
+                    name="userPrincipalName"
+                    value={currentStaff?.userPrincipalName || ''}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full text-black bg-gray-100"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-black">Temporary Password</label>
+                  <input
+                    type="text"
+                    name="tempPassword"
+                    value={currentStaff?.tempPassword || ''}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full text-black bg-gray-100"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-black">Photo URL</label>
+                  <input
+                    type="text"
+                    name="photoUrl"
+                    value={currentStaff?.photoUrl || ''}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full text-black bg-gray-100"
+                  />
+                </div>
+                {/* Read-only fields with default values */}
                 <div>
                   <label className="block text-black">User Role ID</label>
                   <input
                     type="text"
                     name="userRoleId"
-                    value={currentStaff?.userRoleId || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Profession ID</label>
-                  <input
-                    type="text"
-                    name="professionId"
-                    value={currentStaff?.professionId || ''}
-                    onChange={handleInputChange}
+                    value="6cb73460-199a-4553-b993-b271a65b0536"
+                    readOnly
                     className="border p-2 w-full text-black bg-gray-100"
                   />
                 </div>
@@ -199,8 +245,8 @@ const StaffPage: React.FC = () => {
                   <input
                     type="text"
                     name="departmentId"
-                    value={currentStaff?.departmentId || ''}
-                    onChange={handleInputChange}
+                    value="fca6615e-b585-49e5-a849-b7ec31fd8f1d"
+                    readOnly
                     className="border p-2 w-full text-black bg-gray-100"
                   />
                 </div>
@@ -220,32 +266,12 @@ const StaffPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-black">User Principal Name</label>
+                  <label className="block text-black">Profession ID</label>
                   <input
                     type="text"
-                    name="userPrincipalName"
-                    value={currentStaff?.userPrincipalName || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Temporary Password</label>
-                  <input
-                    type="text"
-                    name="tempPassword"
-                    value={currentStaff?.tempPassword || ''}
-                    onChange={handleInputChange}
-                    className="border p-2 w-full text-black bg-gray-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-black">Photo URL</label>
-                  <input
-                    type="text"
-                    name="photoUrl"
-                    value={currentStaff?.photoUrl || ''}
-                    onChange={handleInputChange}
+                    name="professionId"
+                    value="8c64bbdd-f562-4291-8ddf-58c80d310c52"
+                    readOnly
                     className="border p-2 w-full text-black bg-gray-100"
                   />
                 </div>
@@ -254,8 +280,8 @@ const StaffPage: React.FC = () => {
                   <input
                     type="text"
                     name="createdBy"
-                    value={currentStaff?.createdBy || ''}
-                    onChange={handleInputChange}
+                    value="2d13296c-7d3b-4496-b049-4848b5e07402"
+                    readOnly
                     className="border p-2 w-full text-black bg-gray-100"
                   />
                 </div>
