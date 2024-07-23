@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Logo from '../../images/logo/logo.svg';
 import Layout from '../../layout/Layout';
 import { useMsal } from '@azure/msal-react';
@@ -8,10 +8,16 @@ import { loginRequest } from '../../authConfig';
 const SignIn: React.FC = () => {
   const { instance } = useMsal();
 
+  const navigate = useNavigate();
+
+
   const handleLogin = () => {
     instance.loginRedirect(loginRequest).catch(e => {
       console.error(e);
     });
+
+    navigate('/dashboard');
+    
   };
 
   return (
