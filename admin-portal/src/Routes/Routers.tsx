@@ -6,17 +6,19 @@ import Register from '../Pages/Register';
 import AdminPage from '../Pages/AdminPage';
 import DashboardPage from '../Pages/Dashboard'; // Import DashboardPage if it exists
 import DepartmentPage from '../Pages/Department';
+import SoftwareManagement from '../Pages/SoftwareManagement';
 
 const Routers = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      {/* <Route path="/" element={<Home />} /> */}
       <Route path="/login" element={<Login />} />
       <Route path="/Inventory_page" element={<InventoryPage />} />
       <Route path="/Register" element={<Register />} />
-      <Route path="/Admin_page" element={<AdminPage />} />
+      <Route path="/" element={<AdminPage />} />
       <Route path="/Dashboard" element={<DashboardPage />} />
       <Route path="/Department" element={<DepartmentPage />} />
+      <Route path="/Software_page" element={<SoftwareManagement />} />
       <Route path="/Admin_page" element={<AdminPage />} />
        {/* Ensure this route exists if Dashboard is used */}
       {/* Add other routes as needed */}
