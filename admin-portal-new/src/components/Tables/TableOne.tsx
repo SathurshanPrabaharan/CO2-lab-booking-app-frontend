@@ -20,6 +20,12 @@ interface LabBooking {
   title: string;
 }
 
+const statusBackgroundColors: Record<string, string> = {
+  APPROVED: 'bg-green-100 text-green-800', // Green for approved
+  REJECTED: 'bg-red-100 text-red-800', // Red for rejected
+  PPENDING: 'bg-yellow-100 text-yellow-800', // Yellow for pending
+};
+
 const TableOne = () => {
   const [bookings, setBookings] = useState<LabBooking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -121,7 +127,7 @@ const TableOne = () => {
             </div>
             <div className="flex items-center justify-between sm:justify-center p-2.5 xl:p-5">
               <span className="block sm:hidden font-medium">Status:</span>
-              <p className="text-black dark:text-white">
+              <p className={`px-2 py-1 rounded ${statusBackgroundColors[booking.bookingStatus]}`}>
                 {booking.bookingStatus}
               </p>
             </div>
