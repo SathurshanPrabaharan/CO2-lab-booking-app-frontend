@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, addMonths, subMonths } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../layout/DefaultLayout';
 import axios from 'axios';
@@ -9,6 +10,7 @@ const Calendar = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   // Fetch bookings from the API
   useEffect(() => {
@@ -52,6 +54,12 @@ const Calendar = () => {
     setCurrentDate(newDate);
   };
 
+  // Function to handle date click
+  const handleDateClick = (date) => {
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    navigate(`/booking/lab-booking?date=${formattedDate}`); // Redirect to lab booking page with date query param
+  };
+
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Calendar" />
@@ -89,6 +97,7 @@ const Calendar = () => {
                       <td
                         key={colIndex}
                         className={`ease relative h-20 cursor-pointer border border-stroke p-2 transition duration-500 hover:bg-gray dark:border-strokedark dark:hover:bg-meta-4 md:h-25 md:p-6 xl:h-31 ${hasEvents ? (events[0].bookingStatus === 'APPROVED' ? 'bg-blue-100 dark:bg-blue-700' : events[0].bookingStatus === 'REJECTED' ? 'bg-red-100 dark:bg-red-700' : 'bg-yellow-100 dark:bg-yellow-700') : ''}`}
+                        onClick={() => handleDateClick(date)} // Handle click event
                       >
                         <span className="font-medium text-black dark:text-white">
                           {format(date, 'd')}

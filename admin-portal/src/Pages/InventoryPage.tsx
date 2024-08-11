@@ -53,7 +53,13 @@ const InventoryPage: React.FC = () => {
       try {
         const response = await axios.get('http://localhost:8085/api/v1/inventories?page=1&size=999');
         const { results } = response.data.data;
-        const sortedResults = results.sort((a: Computer, b: Computer) => a.name.localeCompare(b.name));
+
+        // Natural sorting function
+        const naturalSort = (a: string, b: string) => {
+          return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+        };
+
+        const sortedResults = results.sort((a: Computer, b: Computer) => naturalSort(a.name, b.name));
         setInventory(sortedResults);
       } catch (error) {
         setError('Error fetching inventory data.');

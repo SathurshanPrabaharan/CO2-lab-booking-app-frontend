@@ -9,6 +9,8 @@ import StaffPage from './StaffPage';
 import Course from './Course';
 import Department from './Department';
 import Profession from './Profession';
+import SoftwarePage from './SoftwareManagement';
+import SoftwareManagement from './SoftwareManagement';
 
 const Admin: React.FC = () => {
   const [labs, setLabs] = useState({
@@ -95,7 +97,7 @@ const Admin: React.FC = () => {
         await axios.patch(`http://localhost:8087/api/v1/bookings/valid-bookings/${id}`, {
           bookingStatus: "APPROVED",
           rejectReason: null,
-          updatedByAdminId: "9ff82bec-c216-4793-b2b2-6de18041c7e0"
+          updatedByAdminId: "578caa53-9b61-49f8-9328-a6afb48e5eb4"
         });
         console.log(`Accepted ${type} with id ${id}`);
       } catch (error) {
@@ -121,7 +123,7 @@ const Admin: React.FC = () => {
         await axios.patch(`http://localhost:8087/api/v1/bookings/valid-bookings/${id}`, {
           bookingStatus: "REJECTED",
           rejectReason: reason,
-          updatedByAdminId: "9ff82bec-c216-4793-b2b2-6de18041c7e0"
+          updatedByAdminId: "578caa53-9b61-49f8-9328-a6afb48e5eb4"
         });
         console.log(`Rejected ${type} with id ${id}`);
       } catch (error) {
@@ -226,6 +228,8 @@ const Admin: React.FC = () => {
         return <Department />;
       case 'Profession':
         return <Profession />;
+      case 'Software_page':
+        return <SoftwareManagement />;
       default:
         return null;
     }
@@ -268,6 +272,7 @@ const Admin: React.FC = () => {
           <li onClick={() => setActivePage('Home')} className={`cursor-pointer py-2 px-4 ${activePage === 'Home' ? 'bg-gray-600' : ''}`}>Home</li>
           <li onClick={() => setActivePage('Dashboard')} className={`cursor-pointer py-2 px-4 ${activePage === 'Dashboard' ? 'bg-gray-600' : ''}`}>Dashboard</li>
           <li onClick={() => setActivePage('Inventory')} className={`cursor-pointer py-2 px-4 ${activePage === 'Inventory' ? 'bg-gray-600' : ''}`}>Inventory</li>
+          <li onClick={() => setActivePage('Software_page')} className={`cursor-pointer py-2 px-4 ${activePage === 'Software_page' ? 'bg-gray-600' : ''}`}>Software Management</li>
           <li onClick={() => setActivePage('Settings')} className={`cursor-pointer py-2 px-4 ${activePage === 'Settings' ? 'bg-gray-600' : ''}`}>Settings</li>
           <li onClick={() => setActivePage('Staff_management')} className={`cursor-pointer py-2 px-4 ${activePage === 'Staff_management' ? 'bg-gray-600' : ''}`}>Staff Management</li>
           <li onClick={() => setActivePage('student_management')} className={`cursor-pointer py-2 px-4 ${activePage === 'student_management' ? 'bg-gray-600' : ''}`}>Student Management</li>
