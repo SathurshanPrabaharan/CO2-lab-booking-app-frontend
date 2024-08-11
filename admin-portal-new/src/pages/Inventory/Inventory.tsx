@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../layout/DefaultLayout';
 import axios from 'axios';
@@ -59,6 +60,8 @@ const Inventory: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingDetails, setLoadingDetails] = useState<boolean>(false);
 
+  const navigate = useNavigate(); // Initialize useNavigate
+
   useEffect(() => {
     const fetchPcs = async () => {
       try {
@@ -107,6 +110,10 @@ const Inventory: React.FC = () => {
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFilter((prevFilter) => ({ ...prevFilter, [name]: value }));
+  };
+
+  const handleEditClick = (id: string) => {
+    navigate(`/inventory/edit/${id}`); // Pass the ID in the URL
   };
 
   const filteredPcs = pcs.filter(
@@ -169,7 +176,7 @@ const Inventory: React.FC = () => {
         {selectedPc && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="p-8 rounded border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <h3 className="font-medium text-black dark:text-white">PC Details</h3>
+              <h3 className="text-black dark:text-white font-bold marker pb-4">PC Details</h3>
               {loadingDetails ? (
                 <div>Loading...</div>
               ) : (
@@ -194,6 +201,12 @@ const Inventory: React.FC = () => {
                   <p className="text-black dark:text-white">Installed Softwares: {selectedPc.installedSoftwares.join(', ')}</p>
                   <button
                     className="mt-4 px-4 py-2 rounded bg-primary text-white"
+                    onClick={() => handleEditClick(selectedPc.id)} // Pass the selected PC's ID
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="mt-4 ml-4 px-4 py-2 rounded bg-danger text-white"
                     onClick={closePcDetails}
                   >
                     Close

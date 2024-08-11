@@ -17,7 +17,7 @@ const Calendar = () => {
     const fetchBookings = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8087/api/v1/bookings/valid-bookings?createdByStaffId=4a2ca96b-a846-476a-b8df-d5007af084fb&page=1&size=10`);
+        const response = await axios.get(`http://localhost:8087/api/v1/bookings/valid-bookings?page=1&size=100`);
         setBookings(response.data.data.results);
       } catch (error) {
         setError('Failed to load bookings.');

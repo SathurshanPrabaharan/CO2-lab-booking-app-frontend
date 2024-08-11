@@ -10,7 +10,7 @@ const Dashboard: React.FC = () => {
   const [totalBookings, setTotalBookings] = useState(0);
   useEffect(() => {
     // Fetch data from API
-    fetch('http://localhost:8087/api/v1/bookings/valid-bookings?createdByStaffId=4a2ca96b-a846-476a-b8df-d5007af084fb&page=1&size=10')
+    fetch('http://localhost:8087/api/v1/bookings/valid-bookings?page=1&size=100')
       .then(response => response.json())
       .then(data => {
         if (data.message === 'Bookings fetched successfully') {

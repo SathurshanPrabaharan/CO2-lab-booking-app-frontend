@@ -17,6 +17,10 @@ import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Inventory from './pages/Inventory/Inventory';
+import Edit_Inventory from './pages/Inventory/Edit_Inventory';
+import Bookings from './pages/Bookings';
+import Staff from './pages/Staff';
+import Student from './pages/Student';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,7 +43,7 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="Sign In | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Sign In | CO2 Lab Booking System | Admin Portal" />
               <SignIn/>
             </>
           }
@@ -48,7 +52,7 @@ function App() {
           path="/dashboard"
           element={
             <>
-              <PageTitle title="Dashboard | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Dashboard | CO2 Lab Booking System | Admin Portal" />
               <Dashboard />
             </>
           }
@@ -57,7 +61,7 @@ function App() {
           path="/calendar"
           element={
             <>
-              <PageTitle title="Calendar | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Calendar | CO2 Lab Booking System | Admin Portal" />
               <Calendar />
             </>
           }
@@ -66,7 +70,7 @@ function App() {
           path="/profile"
           element={
             <>
-              <PageTitle title="Profile | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Profile | CO2 Lab Booking System | Admin Portal" />
               <Profile />
             </>
           }
@@ -75,7 +79,7 @@ function App() {
           path="/forms/form-elements"
           element={
             <>
-              <PageTitle title="Form Elements | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Form Elements | CO2 Lab Booking System | Admin Portal" />
               <FormElements />
             </>
           }
@@ -84,7 +88,7 @@ function App() {
           path="/booking/lab-booking"
           element={
             <>
-              <PageTitle title="Lab Booking | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Lab Booking | CO2 Lab Booking System | Admin Portal" />
               <LabBook />
             </>
           }
@@ -93,7 +97,7 @@ function App() {
           path="/booking/lab-cancel"
           element={
             <>
-              <PageTitle title="Lab Cancelling | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Lab Cancelling | CO2 Lab Booking System | Admin Portal" />
               <LabCancel />
             </>
           }
@@ -102,7 +106,7 @@ function App() {
           path="/inventory"
           element={
             <>
-              <PageTitle title="Inventory | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Inventory | CO2 Lab Booking System | Admin Portal" />
               <Inventory />
             </>
           }
@@ -111,7 +115,7 @@ function App() {
           path="/tables"
           element={
             <>
-              <PageTitle title="Tables | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Tables | CO2 Lab Booking System | Admin Portal" />
               <Tables />
             </>
           }
@@ -120,7 +124,7 @@ function App() {
           path="/settings"
           element={
             <>
-              <PageTitle title="Settings | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Settings | CO2 Lab Booking System | Admin Portal" />
               <Settings />
             </>
           }
@@ -129,7 +133,7 @@ function App() {
           path="/chart"
           element={
             <>
-              <PageTitle title="Basic Chart | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Basic Chart | CO2 Lab Booking System | Admin Portal" />
               <Chart />
             </>
           }
@@ -138,7 +142,7 @@ function App() {
           path="/ui/alerts"
           element={
             <>
-              <PageTitle title="Alerts | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Alerts | CO2 Lab Booking System | Admin Portal" />
               <Alerts />
             </>
           }
@@ -147,7 +151,7 @@ function App() {
           path="/ui/buttons"
           element={
             <>
-              <PageTitle title="Buttons | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Buttons | CO2 Lab Booking System | Admin Portal" />
               <Buttons />
             </>
           }
@@ -156,7 +160,7 @@ function App() {
           path="/auth/signin"
           element={
             <>
-              <PageTitle title="Signin | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Signin | CO2 Lab Booking System | Admin Portal" />
               <SignIn />
             </>
           }
@@ -165,8 +169,44 @@ function App() {
           path="/auth/signup"
           element={
             <>
-              <PageTitle title="Signup | CO2 Lab Booking System | Staff Portal" />
+              <PageTitle title="Signup | CO2 Lab Booking System | Admin Portal" />
               <SignUp />
+            </>
+          }
+        />
+      <Route
+        path="/inventory/edit/:id"
+        element={
+          <>
+            <PageTitle title="Inventory | Edit | CO2 Lab Booking System | Admin Portal" />
+            <Edit_Inventory  />
+          </>
+        }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <>
+              <PageTitle title="Bookings | CO2 Lab Booking System | Admin Portal" />
+              <Bookings/>
+            </>
+          }
+        />
+        <Route
+          path="/staffs"
+          element={
+            <>
+              <PageTitle title="Staff Details | CO2 Lab Booking System | Admin Portal" />
+              <Staff/>
+            </>
+          }
+        />
+        <Route
+          path="/students"
+          element={
+            <>
+              <PageTitle title="Student Details | CO2 Lab Booking System | Admin Portal" />
+              <Student/>
             </>
           }
         />

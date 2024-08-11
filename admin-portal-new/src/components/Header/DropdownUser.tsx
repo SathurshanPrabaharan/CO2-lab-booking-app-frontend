@@ -6,7 +6,7 @@ import { loginRequest } from '../../authConfig';
 
 import UserOne from '../../images/user/user-01.png';
 
-const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/4a2ca96b-a846-476a-b8df-d5007af084fb';
+const ADMIN_API_URL = 'http://localhost:8084/api/v1/users/admins/1fa5094f-cf93-4df4-b830-327bab301bb8';;
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -26,7 +26,7 @@ const DropdownUser = () => {
 
   // Fetch staff details
   useEffect(() => {
-    axios.get(STAFF_API_URL)
+    axios.get(ADMIN_API_URL)
       .then(response => {
         const staff = response.data.data;
         setDisplayName(staff.displayName || '');
@@ -73,7 +73,7 @@ const DropdownUser = () => {
           <span className="block text-sm font-medium text-black dark:text-white">
             {displayName}
           </span>
-          <span className="block text-xs">Staff</span>
+          <span className="block text-xs">Admin</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

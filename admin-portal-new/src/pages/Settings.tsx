@@ -2,12 +2,10 @@ import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import userThree from '../images/user/user-03.png';
 import DefaultLayout from '../layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import Select, { MultiValue, ActionMeta } from 'react-select';
 import axios from 'axios';
 
 
-const STAFF_API_URL = 'http://localhost:8084/api/v1/users/staffs/4a2ca96b-a846-476a-b8df-d5007af084fb';
-const COURSE_API_URL = 'http://localhost:8086/api/v1/configurations/courses?page=1&size=10'
+const ADMIN_API_URL = 'http://localhost:8084/api/v1/users/admins/1fa5094f-cf93-4df4-b830-327bab301bb8';
 
 
 const Settings = () => {
@@ -19,53 +17,32 @@ const Settings = () => {
   const [email, setEmail] = useState('');
   const [profession, setProfession] = useState('');
   const [department, setDepartment] = useState('');
-  const [responsibleCourses, setResponsibleCourses] = useState<MultiValue<{ value: string; label: string }>>([]);
   const [status, setStatus] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [savedData, setSavedData] = useState<any>(null);  // Added state for saved data
 
-  const [courseOptions, setCourseOptions] = useState<{ value: string; label: string }[]>([]);
-
 
   useEffect(() => {
-    axios.get(STAFF_API_URL)
+    axios.get(ADMIN_API_URL)
       .then(response => {
-        const staff = response.data.data;
-        setSavedData(staff);  // Save the response data
+        const admin = response.data.data;
+        setSavedData(admin);  // Save the response data
 
         // Populate the form fields with the saved data
-        setFirstName(staff.firstName || '');
-        setLastName(staff.lastName || '');
-        setDisplayName(staff.displayName || '');
-        setMobile(staff.mobile || '');
-        setGender(staff.gender || '');
-        setEmail(staff.contact_email || '');
-        setProfession(staff.profession ? staff.profession.name : null);
-        setDepartment(staff.department? staff.department.name : null);
-        setResponsibleCourses(staff.responsibleCourses.map((course: string) => ({ value: course, label: course })));
-        setStatus(staff.status || '');
+        setFirstName(admin.firstName || '');
+        setLastName(admin.lastName || '');
+        setDisplayName(admin.displayName || '');
+        setMobile(admin.mobile || '');
+        setGender(admin.gender || '');
+        setEmail(admin.contact_email || '');
+        setProfession(admin.profession ? admin.profession.name : null);
+        setDepartment(admin.department? admin.department.name : null);
+        setStatus(admin.status || '');
       })
       .catch(error => {
-        console.error('Error fetching staff details:', error);
+        console.error('Error fetching admin details:', error);
       });
   }, []);
-
-  useEffect(() => {
-    // Fetch course options
-    axios.get(COURSE_API_URL)
-      .then(response => {
-        const courses = response.data.data.results;
-        const options = courses.map((course: { id: string, code: string }) => ({
-          value: course.id,
-          label: course.code
-        }));
-        setCourseOptions(options);
-      })
-      .catch(error => {
-        console.error('Error fetching course details:', error);
-      });
-  }, []);
-  
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -77,9 +54,7 @@ const Settings = () => {
 
   const handleSaveClick = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const responsibleCourseIds= responsibleCourses.map((course) => course.value);
-    
+        
     const updatedData = {
       firstName,
       lastName,
@@ -89,7 +64,6 @@ const Settings = () => {
       userRoleId: savedData.userRole.id,
       professionId: savedData.profession ? savedData.profession.id : null,
       departmendId: savedData.department ? savedData.department.id : null,
-      responsibleCourseIds,
       contact_email: email,
       photoUrl: savedData.photoUrl,
       isInitalLogged: savedData.isInitalLogged,
@@ -102,22 +76,14 @@ const Settings = () => {
   
     console.log('Updated Data:', updatedData);  // Log the data being sent
   
-    axios.put(`${STAFF_API_URL}`, updatedData)
+    axios.put(`${ADMIN_API_URL}`, updatedData)
       .then(() => {
         setIsEditing(false);
         // Optionally refresh the data or show a success message
       })
       .catch(error => {
-        console.error('Error saving staff details:', error);
+        console.error('Error saving admin details:', error);
       });
-  };
-  
-
-  const handleCoursesChange = (
-    newValue: MultiValue<{ value: string; label: string }>,
-    actionMeta: ActionMeta<{ value: string; label: string }>
-  ) => {
-    setResponsibleCourses(newValue as { value: string; label: string }[]);
   };
 
   return (
@@ -290,26 +256,6 @@ const Settings = () => {
                       onChange={(e) => setDepartment(e.target.value)}
                       disabled
                       className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
-                        !isEditing ? 'bg-opacity-50' : ''
-                      }`}
-                    />
-                  </div>
-
-                  <div className="mb-5.5">
-                    <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="responsibleCourses"
-                    >
-                      Responsible Courses
-                    </label>
-                    <Select
-                      id="responsibleCourses"
-                      isDisabled={!isEditing}
-                      isMulti
-                      options={courseOptions}
-                      value={responsibleCourses}
-                      onChange={handleCoursesChange}
-                      className={`w-full rounded border border-stroke bg-gray py-3 px-4.5 text-black dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary ${
                         !isEditing ? 'bg-opacity-50' : ''
                       }`}
                     />

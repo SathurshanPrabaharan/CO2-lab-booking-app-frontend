@@ -63,7 +63,7 @@ const Header = (props: {
         </div>
                   
         <div>
-          <TypingEffect text="Welcome to CO2 Lab Booking System" speed={100}/>
+          <TypingEffect text="Welcome to CO2 Lab Booking System | Admin Portal" speed={100}/>
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
