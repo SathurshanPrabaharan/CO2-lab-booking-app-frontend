@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
-import CustomCalendar from '../Components/CustomCalendar.tsx'; // Adjust the path as necessary
+import CustomCalendar from '../Components/CustomCalendar'; // Adjust the path as necessary
 
-const DashboardPage = () => {
+const DashboardPage: React.FC = () => {
   const [date, setDate] = useState(new Date());
   const [bookedDates, setBookedDates] = useState([new Date(2024, 5, 1), new Date(2024, 5, 5)]); // Example booked dates
 

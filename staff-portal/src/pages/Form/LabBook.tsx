@@ -1,26 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import DefaultLayout from '../../layout/DefaultLayout';
-
-// Helper function to convert 12-hour time format to 24-hour format
-const convertTo24HourFormat = (time12: string) => {
-  const [time, period] = time12.split(' ');
-  let [hour, minute] = time.split(':').map(Number);
-
-  if (period === 'PM' && hour !== 12) {
-    hour += 12;
-  } else if (period === 'AM' && hour === 12) {
-    hour = 0;
-  }
-
-  return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-};
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const COURSE_API_URL = 'http://localhost:8086/api/v1/configurations/courses?page=1&size=10';
 
 const LabBook = () => {
+  const location = useLocation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [requirementDescription, setRequirementDescription] = useState('');
@@ -33,6 +22,13 @@ const LabBook = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Extract date from query params if present
+    const queryParams = new URLSearchParams(location.search);
+    const dateParam = queryParams.get('date');
+    if (dateParam) {
+      setDate(dateParam);
+    }
+
     // Fetch course options
     axios.get(COURSE_API_URL)
       .then(response => {
@@ -50,20 +46,16 @@ const LabBook = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Basic validation
     if (!title || !courseId || !date || !startTime || !endTime) {
-      alert('Please fill in all required fields.');
+      toast.error('Please fill in all required fields.');
       return;
     }
-
-    // Convert 24-hour format to 12-hour format for API submission
-    const startTime12Hour = convertTo24HourFormat(startTime);
-    const endTime12Hour = convertTo24HourFormat(endTime);
 
     try {
       const response = await axios.post('http://localhost:8087/api/v1/bookings/valid-bookings', {
@@ -72,16 +64,16 @@ const LabBook = () => {
         requirementDescription,
         courseId,
         date,
-        startTime: startTime12Hour,
-        endTime: endTime12Hour,
+        startTime,
+        endTime,
         createdByStaffId: '4a2ca96b-a846-476a-b8df-d5007af084fb' // This can be dynamic if needed
       });
 
       console.log('Booking successful:', response.data);
-      alert('Lab booked successfully!');
+      toast.success('Lab booked successfully!');
     } catch (error) {
       console.error('Error booking lab:', error);
-      alert('Error booking lab. Please try again.');
+      toast.error('Error booking lab. Please try again.');
     }
   };
 
@@ -207,14 +199,20 @@ const LabBook = () => {
                   />
                 </div>
 
-                <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                  Book Lab
-                </button>
+                <div className="flex justify-end gap-4.5">
+                  <button
+                    type="submit"
+                    className="bg-primary hover:bg-opacity-90 text-white font-medium py-2 px-6 rounded"
+                  >
+                    Book Lab
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </DefaultLayout>
   );
 };
